@@ -10,18 +10,19 @@ require 'mina/git'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :domain, 'foobar.com'
-set :deploy_to, '/var/www/foobar.com'
-set :repository, 'git://...'
+set :domain, 'castory001'
+set :deploy_to, '/home/remper/castory'
+set :repository, 'git@github.com:hikarock/castory.git'
 set :branch, 'master'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'log']
+set :shared_paths, ['log']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
 #   set :port, '30000'     # SSH port number.
+set :user, 'remper'    # Username in the server to SSH to.
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
@@ -40,12 +41,6 @@ end
 task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/log"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
-
-  queue! %[mkdir -p "#{deploy_to}/shared/config"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/config"]
-
-  queue! %[touch "#{deploy_to}/shared/config/database.yml"]
-  queue  %[echo "-----> Be sure to edit 'shared/config/database.yml'."]
 end
 
 desc "Deploys the current version to the server."
@@ -55,9 +50,6 @@ task :deploy => :environment do
     # instance of your project.
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
-    invoke :'bundle:install'
-    invoke :'rails:db_migrate'
-    invoke :'rails:assets_precompile'
 
     to :launch do
       queue "touch #{deploy_to}/tmp/restart.txt"
