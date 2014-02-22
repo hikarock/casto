@@ -17,7 +17,7 @@ set :branch, 'master'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['log']
+set :shared_paths, ['log', 'node_modules']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -54,6 +54,22 @@ namespace :rendr do
       grunt compile
     }
   end
+
+  task :start do
+    queue 'echo "-----> Start server."'
+    queue! %{
+      cd #{deploy_to}/current
+      grunt startProductionNode
+    }
+  end
+
+  task :stop do
+    queue 'echo "-----> Start server."'
+    queue! %{
+      cd #{deploy_to}/current
+      grunt stopProductionNode
+    }
+  end
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -61,7 +77,9 @@ end
 # all releases.
 task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared/log"]
+  queue! %[mkdir -p "#{deploy_to}/shared/node_modules"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/log"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/shared/node_modules"]
 end
 
 desc "Deploys the current version to the server."
@@ -71,10 +89,12 @@ task :deploy => :environment do
     # instance of your project.
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
+    invoke :'rendr:install'
+    invoke :'rendr:compile'
 
     to :launch do
-      invoke :'rendr:install'
-      invoke :'rendr:compile'
+      invoke :'rendr:stop'
+      invoke :'rendr:start'
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
