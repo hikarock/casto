@@ -4,3 +4,5 @@ public/mergedAssets.js
 public/testBundle.js
 public/styles.css
 runtime.json
+.bundle/
+vendor/
