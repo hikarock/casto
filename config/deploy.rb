@@ -35,6 +35,27 @@ task :environment do
   # invoke :'rvm:use[ruby-1.9.3-p125@default]'
 end
 
+# rendr
+# =============
+namespace :rendr do
+  desc "npm install"
+  task :install do
+    queue 'echo "-----> Start npm install tasks."'
+    queue! %{
+      cd #{deploy_to}/current
+      npm install
+    }
+  end
+
+  task :compile do
+    queue 'echo "-----> Start compile tasks."'
+    queue! %{
+      cd #{deploy_to}/current
+      grunt compile
+    }
+  end
+end
+
 # Put any custom mkdir's in here for when `mina setup` is ran.
 # For Rails apps, we'll make some of the shared paths that are shared between
 # all releases.
@@ -52,6 +73,8 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
 
     to :launch do
+      invoke :'rendr:install'
+      invoke :'rendr:compile'
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
   end
