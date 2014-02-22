@@ -6,3 +6,4 @@ public/styles.css
 runtime.json
 .bundle/
 vendor/
+*.swp
