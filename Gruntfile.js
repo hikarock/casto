@@ -69,6 +69,7 @@ module.exports = function(grunt) {
     rendr_stitch: {
       compile: {
         options: {
+          force: true,
           dependencies: [
             'assets/vendor/**/*.js'
           ],
