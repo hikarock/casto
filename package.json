@@ -21,8 +21,7 @@
     "debug": "*",
     "config": "0.4.x",
     "js-yaml": "2.x.x",
-    "forever": "~0.10.11",
-    "pusher": "~0.1.3"
+    "forever": "~0.10.11"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
