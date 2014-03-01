@@ -1,1 +1,5 @@
 # Config settings for NODE_ENV=production
+api:
+  storyboards:
+    host: www.storyboards.jp
+    protocol: http
