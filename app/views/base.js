@@ -1,5 +1,13 @@
 var RendrView = require('rendr/shared/base/view');
 
-// Create a base view, for adding common extensions to our
-// application's views.
-module.exports = RendrView.extend({});
+module.exports = RendrView.extend({
+  getTemplateData: function() {
+    return {
+      version:     0.1,
+      appName:     'casto',
+      apiName:     'Storyboards',
+      apiUrl:      'http://www.storyboards.jp',
+      description: 'hello world.'
+    };
+  }
+});
