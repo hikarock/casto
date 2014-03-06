@@ -1,38 +1,57 @@
-var BaseView = require('../base');
+var BaseView = require('../base'),
+    _ = require('underscore');
 
 module.exports = BaseView.extend({
   className: 'editor_index_view',
-  input: "hello",
-  postRender: function() {
-    console.log("editor view postRender");
-    $.event.props.push("dataTransfer");
+  update: function(evt) {
+    console.log("update");
+    console.log(evt);
+  },
 
-    $('#drop').on('drop', function(evt) {
+  //TODO:
+  fileName: 'bar.js',
+
+  postRender: function() {
+    var self = this;
+    $.event.props.push("dataTransfer");
+    var editor = ace.edit("editor");
+    editor.setReadOnly(true);
+    editor.setPrintMarginColumn(false);
+    editor.setTheme("ace/theme/ambiance");
+
+    console.log("editor view postRender");
+
+    $('#editor').on('drop', function(evt) {
       evt.preventDefault();
       $(this).removeClass('over');
       var files = evt.dataTransfer.files;
-      for (var i = 0; i < files.length; i++) {
-        var f = files[i];
-        var reader = new FileReader();
-        if (f.type.match('text.*')) {
-          lastMod = f.lastModifiedDate;
-          setInterval(function() {
-            tick(f);
-          }, 250);
-          reader.onload = function (evt) {
-            $('#editor').text(reader.result);
-          };
-          reader.readAsText(f);
-        }
+      var f = files[0];
+
+      //TODO:
+      if (self.getExtention(f.name) == 'js') {
+        editor.getSession().setMode("ace/mode/javascript");
+      }
+      console.log(f);
+      var reader = new FileReader();
+      if (f.type.match('text.*')) {
+        lastMod = f.lastModifiedDate;
+        setInterval(function() {
+          tick(f);
+        }, 250);
+        reader.onload = function (evt) {
+          editor.setValue(reader.result);
+          editor.clearSelection();
+        };
+        reader.readAsText(f);
       }
     });
 
-    $('#drop').on('dragleave', function(evt) {
+    $('#editor').on('dragleave', function(evt) {
       $(this).removeClass('over');
       evt.preventDefault();
     });
 
-    $('#drop').on('dragover', function(evt) {
+    $('#editor').on('dragover', function(evt) {
       $(this).addClass('over');
       evt.preventDefault();
     });
@@ -44,7 +63,9 @@ module.exports = BaseView.extend({
         console.log(f.lastModifiedDate + ":" + lastMod);
         var reader = new FileReader();
         reader.onload = function (evt) {
-          $('#editor').text(reader.result);
+          editor.setValue(reader.result);
+          editor.clearSelection();
+          self.update();
         };
         reader.readAsText(f);
       }
@@ -52,11 +73,27 @@ module.exports = BaseView.extend({
   },
 
   getTemplateData: function() {
-    return {
-      text: this.input
-    };
+    var data = BaseView.prototype.getTemplateData.call(this);
+    return _.extend({}, data, {
+      fileName: this.fileName
+    });
+  },
+
+  getExtention: function(fileName) {
+    var ret;
+    if (!fileName) {
+      return ret;
+    }
+    var fileTypes = fileName.split(".");
+    var len = fileTypes.length;
+    if (len === 0) {
+      return ret;
+    }
+    ret = fileTypes[len - 1];
+    return ret;
   }
 });
+
 module.exports.id = 'editor/index';
 console.log("editor view");
 
