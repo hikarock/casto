@@ -1,25 +1,50 @@
 var BaseView = require('../base'),
-    _ = require('underscore');
+    _        = require('underscore'),
+    Code     = require('../../models/code');
 
 module.exports = BaseView.extend({
   className: 'editor_index_view',
+
+  //TODO:
+  unique: '6hck4e',
+  token:  'y0zdzw2xs6n42pj97aby6zugdbmwnyttcjphobhh',
+  text:   '',
+
   update: function(evt) {
-    console.log("update");
-    console.log(evt);
+    console.log('update');
+    var self = this;
+    var code = new Code({
+      'unique': this.unique,
+      'token':  this.token,
+      'body':   this.text
+      //TODO: fileNameも保存したい
+    });
+
+    //TODO: fetcherがどうとか言われる
+    var promise = code.save();
+    promise
+    .success(function() {
+      console.log('code save success');
+      //self.app.router.redirectTo('/posts');
+    })
+    .error(function() {
+      console.log('code save error');
+    });
   },
 
   //TODO:
   fileName: 'bar.js',
 
   postRender: function() {
+    console.log("editor view postRender");
+
     var self = this;
     $.event.props.push("dataTransfer");
+
     var editor = ace.edit("editor");
     editor.setReadOnly(true);
     editor.setPrintMarginColumn(false);
     editor.setTheme("ace/theme/ambiance");
-
-    console.log("editor view postRender");
 
     $('#editor').on('drop', function(evt) {
       evt.preventDefault();
@@ -31,19 +56,30 @@ module.exports = BaseView.extend({
       if (self.getExtention(f.name) == 'js') {
         editor.getSession().setMode("ace/mode/javascript");
       }
-      console.log(f);
+
       var reader = new FileReader();
-      if (f.type.match('text.*')) {
-        lastMod = f.lastModifiedDate;
-        setInterval(function() {
-          tick(f);
-        }, 250);
-        reader.onload = function (evt) {
-          editor.setValue(reader.result);
-          editor.clearSelection();
-        };
-        reader.readAsText(f);
+
+      if (!f.type.match('text.*')) {
+        alert('Only text file.');
+        return;
       }
+
+      self.fileName = f.name;
+      self.getTemplateData();
+
+      lastMod = f.lastModifiedDate;
+
+      setInterval(function() {
+        tick(f);
+      }, 250);
+
+      reader.onload = function(evt) {
+        self.text = reader.result;
+        editor.setValue(self.text);
+        editor.clearSelection();
+      };
+
+      reader.readAsText(f);
     });
 
     $('#editor').on('dragleave', function(evt) {
@@ -63,7 +99,8 @@ module.exports = BaseView.extend({
         console.log(f.lastModifiedDate + ":" + lastMod);
         var reader = new FileReader();
         reader.onload = function (evt) {
-          editor.setValue(reader.result);
+          self.text = reader.result;
+          editor.setValue(self.text);
           editor.clearSelection();
           self.update();
         };
