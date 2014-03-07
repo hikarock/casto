@@ -1,11 +1,16 @@
 var BaseView = require('../base'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    Code = require('../../models/code');
 
 module.exports = BaseView.extend({
   className: 'editor_index_view',
   update: function(evt) {
     console.log("update");
     console.log(evt);
+
+    //-- Rendr model save sample.
+    //var code = new Code({"unique":"1rzj6w", "body":"gegege", "token":"qbnk088bmy3isf1h32u9pdus1q0zjzr6a4iir7dv"});
+    //code.save();
   },
 
   //TODO:
