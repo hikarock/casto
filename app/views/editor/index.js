@@ -2,13 +2,18 @@ var BaseView = require('../base'),
     _        = require('underscore'),
     Code     = require('../../models/code');
 
+
 module.exports = BaseView.extend({
   className: 'editor_index_view',
+
+  postInitialize: function() {
+    //
+  },
 
   //TODO:
   unique: '6hck4e',
   token:  'y0zdzw2xs6n42pj97aby6zugdbmwnyttcjphobhh',
-  text:   '',
+  body:   '',
 
   update: function(evt) {
     console.log('update');
@@ -16,20 +21,11 @@ module.exports = BaseView.extend({
     var code = new Code({
       'unique': this.unique,
       'token':  this.token,
-      'body':   this.text
+      'body':   this.body
       //TODO: fileNameも保存したい
     });
 
-    //TODO: fetcherがどうとか言われる
-    var promise = code.save();
-    promise
-    .success(function() {
-      console.log('code save success');
-      //self.app.router.redirectTo('/posts');
-    })
-    .error(function() {
-      console.log('code save error');
-    });
+    code.save();
   },
 
   //TODO:
@@ -65,7 +61,6 @@ module.exports = BaseView.extend({
       }
 
       self.fileName = f.name;
-      self.getTemplateData();
 
       lastMod = f.lastModifiedDate;
 
@@ -74,8 +69,8 @@ module.exports = BaseView.extend({
       }, 250);
 
       reader.onload = function(evt) {
-        self.text = reader.result;
-        editor.setValue(self.text);
+        self.body = reader.result;
+        editor.setValue(self.body);
         editor.clearSelection();
       };
 
@@ -99,8 +94,8 @@ module.exports = BaseView.extend({
         console.log(f.lastModifiedDate + ":" + lastMod);
         var reader = new FileReader();
         reader.onload = function (evt) {
-          self.text = reader.result;
-          editor.setValue(self.text);
+          self.body = reader.result;
+          editor.setValue(self.body);
           editor.clearSelection();
           self.update();
         };
@@ -110,10 +105,14 @@ module.exports = BaseView.extend({
   },
 
   getTemplateData: function() {
+
     var data = BaseView.prototype.getTemplateData.call(this);
-    return _.extend({}, data, {
-      fileName: this.fileName
+
+    data = _.extend({}, data, {
+      code: this.options.code.toJSON()
     });
+
+    return data;
   },
 
   getExtention: function(fileName) {
