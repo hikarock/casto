@@ -43,23 +43,6 @@ module.exports = BaseView.extend({
     return false;
   },
 
-  /*
-   * ファイル名の拡張子を取得する
-   */
-  getExtention: function(fileName) {
-    var ret;
-    if (!fileName) {
-      return ret;
-    }
-    var fileTypes = fileName.split(".");
-    var len = fileTypes.length;
-    if (len === 0) {
-      return ret;
-    }
-    ret = fileTypes[len - 1];
-    return ret;
-  },
-
   handleDragleave: function(evt) {
     $('#editor').removeClass('over');
   },
@@ -80,10 +63,8 @@ module.exports = BaseView.extend({
       return;
     }
 
-    //TODO: js以外も判定する
-    if (that.getExtention(f.name) == 'js') {
-      that.editor.getSession().setMode("ace/mode/javascript");
-    }
+    var mode = modelist.getModeForPath(f.name);
+    that.editor.getSession().setMode(mode.mode);
 
     that.reader = new FileReader();
     that.fileName = f.name;
@@ -113,12 +94,13 @@ module.exports = BaseView.extend({
   setEditor: function() {
     var that = this,
         theme = 'ace/theme/ambiance',
-        defaultMode = 'ace/mode/javascript';
+        defaultMode = 'ace/mode/text';
 
     that.editor = ace.edit("editor");
     that.editor.setReadOnly(true);
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
+    //TODO: modelにfileNameが存在する場合はmodelistから設定したい
     that.editor.getSession().setMode(defaultMode);
   },
 

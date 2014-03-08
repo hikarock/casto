@@ -1,4 +1,5 @@
-define(function(require, exports, module) {
+var modelist = (function() {
+
 "use strict";
 
 var modes = [];
@@ -169,11 +170,11 @@ for (var name in supportedModes) {
     modes.push(mode);
 }
 
-module.exports = {
-    getModeForPath: getModeForPath,
-    modes: modes,
-    modesByName: modesByName
+return {
+  getModeForPath: getModeForPath,
+  modes: modes,
+  modesByName: modesByName
 };
 
-});
+})();
 
