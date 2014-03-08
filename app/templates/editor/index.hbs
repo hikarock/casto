@@ -1,26 +1,24 @@
 <div id="content">
+  {{#if code.body}}<div id="editor">{{code.body}}</div>{{else}}
   <div id="editor">
-  {{#if code.body}}
-    {{code.body}}
-  {{else}}
       _____   ___    ____ ______  ____
      / ___/  / _ |  / __//_  __/ / __ \
     / /__   / __ | _\ \   / /   / /_/ /
     \___/  /_/ |_|/___/  /_/    \____/ v{{version}}
 
       Drag and drop text file here :)
-  {{/if}}
   </div>
+  {{/if}}
 </div>
 <div id="menu">
   <ol>
-    <li>{{appName}}</li>
+    <li>{{appName}} v{{version}}</li>
     <li>{{fileName}}</li>
     {{#if code.unique}}
-    <li>{{code.unique}}</li>
+    <li id="file-name">{{code.unique}}</li>
     {{/if}}
   </ol>
-  <span class="pawerd">
+  <span class="powerd">
     Powerd By <a href="{{apiUrl}}" target="_blank">{{apiName}}</a> and <a href="https://github.com/rendrjs/rendr" target="_blank">Rendr</a>.
   </span>
 </div>
