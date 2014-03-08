@@ -57,6 +57,8 @@ module.exports = BaseView.extend({
     var files = evt.dataTransfer.files;
     var f = files[0];
 
+    clearInterval(that.intervalId);
+
     //TODO: js以外も判定する
     if (that.getExtention(f.name) == 'js') {
       that.editor.getSession().setMode("ace/mode/javascript");
@@ -74,7 +76,7 @@ module.exports = BaseView.extend({
 
     that.lastMod = f.lastModifiedDate;
 
-    setInterval(function() {
+    that.intervalId = setInterval(function() {
       that.tick(f);
     }, 250);
 
@@ -111,7 +113,7 @@ module.exports = BaseView.extend({
     var that = this;
     if (f && f.lastModifiedDate.getTime() != that.lastMod.getTime()) {
       that.lastMod = f.lastModifiedDate;
-      handleLoadReader();
+      that.handleLoadReader();
       that.reader.readAsText(f);
     }
   },
