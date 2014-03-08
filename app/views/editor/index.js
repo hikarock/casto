@@ -27,6 +27,23 @@ module.exports = BaseView.extend({
   },
 
   /*
+   * 読み込み許可するファイルタイプか？
+   */
+  isValidFileType: function(fileType) {
+    var validFileTypes = [
+      '', // .less や .conf が空文字になるため
+      'application/json'
+    ];
+    if (fileType.match(/text.*/)) {
+      return true;
+    }
+    if (_.contains(validFileTypes, fileType)) {
+      return true;
+    }
+    return false;
+  },
+
+  /*
    * ファイル名の拡張子を取得する
    */
   getExtention: function(fileName) {
@@ -44,20 +61,24 @@ module.exports = BaseView.extend({
   },
 
   handleDragleave: function(evt) {
-    $(this).removeClass('over');
+    $('#editor').removeClass('over');
   },
 
   handleDragover: function(evt) {
-    $(this).addClass('over');
+    $('#editor').addClass('over');
   },
 
   handleDrop: function(evt) {
+    $('#editor').removeClass('over');
     var that = this;
-    $(this).removeClass('over');
-    var files = evt.dataTransfer.files;
-    var f = files[0];
-
     clearInterval(that.intervalId);
+    var f = evt.dataTransfer.files[0];
+
+    if (!that.isValidFileType(f.type)) {
+      console.log(f.type);
+      alert('Only text file.');
+      return;
+    }
 
     //TODO: js以外も判定する
     if (that.getExtention(f.name) == 'js') {
@@ -65,12 +86,6 @@ module.exports = BaseView.extend({
     }
 
     that.reader = new FileReader();
-
-    if (!f.type.match('text.*')) {
-      alert('Only text file.');
-      return;
-    }
-
     that.fileName = f.name;
     $('#file-name').text(f.name);
 
@@ -155,7 +170,7 @@ module.exports = BaseView.extend({
     });
 
     return data;
-  },
+  }
 
 });
 
