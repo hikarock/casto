@@ -32,7 +32,8 @@ module.exports = BaseView.extend({
   isValidFileType: function(fileType) {
     var validFileTypes = [
       '', // .less や .conf が空文字になるため
-      'application/json'
+      'application/json',
+      'image/svg+xml'
     ];
     if (fileType.match(/text.*/)) {
       return true;
