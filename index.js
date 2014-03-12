@@ -24,6 +24,10 @@ var dataAdapterConfig = {
   'travis-ci': {
     host: 'api.travis-ci.org',
     protocol: 'https'
+  },
+  'storyboards': {
+    host: 'local.storyboards.jp',
+    protocol: 'http'
   }
 };
 
