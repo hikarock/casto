@@ -1,0 +1,12 @@
+node_modules
+tmp
+npm-debug.log
+coverage
+*.sw?
+**/compiledTemplates.js
+public/mergedAssets.js
+public/testBundle.js
+public/styles.css
+public/js/*
+.DS_Store
+runtime.json
