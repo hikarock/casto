@@ -1,28 +1,8 @@
 var BaseView = require('../base'),
-    _        = require('underscore'),
-    Code     = require('../../models/code');
+    _        = require('underscore');
 
 module.exports = BaseView.extend({
   className: 'code_index_view',
-  initialize: function() {
-    console.log("init");
-  },
-
-  /*
-   * コードを保存する
-   */
-  update: function(evt) {
-    console.log('update');
-    var code = new Code({
-      'unique':   this.unique,
-      'token':    this.token,
-      'body':     this.body,
-      'filename': this.filename
-    }, {
-      app: this.app
-    });
-    code.save();
-  },
 
   /*
    * 読み込み許可するファイルタイプか？
@@ -31,6 +11,7 @@ module.exports = BaseView.extend({
     var validFileTypes = [
       '', // .less や .conf が空文字になるため
       'application/json',
+      'application/msword',
       'image/svg+xml'
     ];
     if (fileType.match(/text.*/)) {
@@ -68,7 +49,7 @@ module.exports = BaseView.extend({
     that.editor.getSession().setMode(mode.mode);
 
     that.reader = new FileReader();
-    that.filename = file.name;
+    that.model.set('filename', file.name);
     $('#filename').text(file.name);
 
     that.lastMod = file.lastModifiedDate;
@@ -86,18 +67,16 @@ module.exports = BaseView.extend({
 
   handleLoadReader: function(evt) {
     var that = this;
-    that.body = that.reader.result;
-    that.editor.setValue(that.body);
+    that.editor.setValue(that.reader.result);
     that.editor.clearSelection();
-    that.update();
+    that.model.set('body', that.reader.result);
+    this.model.save();
   },
 
   setEditor: function() {
     var that = this,
         theme = 'ace/theme/ambiance',
-        mode = modelist.getModeForPath(this.filename);
-
-    console.log(mode);
+        mode = modelist.getModeForPath(this.model.get('filename'));
 
     that.editor = ace.edit("editor");
     that.editor.setReadOnly(true);
@@ -118,19 +97,30 @@ module.exports = BaseView.extend({
     }
   },
 
+  initialize: function() {
+    console.log("--- initialize");
+    //console.log(this.model);
+  },
+
+  preRender: function() {
+    console.log("--- preRender");
+    console.log(this.model);
+    //TODO
+    this.model.set('token', 'y0zdzw2xs6n42pj97aby6zugdbmwnyttcjphobhh');
+  },
+
   /*
    * Environment: client.
    */
   postRender: function() {
+    console.log("--- postRender");
+    console.log(this.model);
     var that = this,
         $editor = $('#editor');
 
     // drag & drop のイベントを追加
     $.event.props.push("dataTransfer");
 
-    console.log(this.app);
-
-    that.filename = 'hoge.html';
     that.setEditor();
 
     $editor.on('drop', function(evt) {
@@ -149,4 +139,5 @@ module.exports = BaseView.extend({
     });
   }
 });
+
 module.exports.id = 'code/index';

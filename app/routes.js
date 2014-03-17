@@ -5,4 +5,5 @@ module.exports = function(match) {
   match('users'       ,       'users#index');
   match('users/:login',       'users#show');
   match('a/:unique',          'code#index');
+  match('a',                  'code#index');
 };
