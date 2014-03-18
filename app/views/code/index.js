@@ -74,9 +74,13 @@ module.exports = BaseView.extend({
   },
 
   setEditor: function() {
-    var that = this,
-        theme = 'ace/theme/ambiance',
+    var that  = this,
+        theme = 'ace/theme/ambiance';
+        mode  = 'javasctipt';
+
+    if (this.model.get('filename')) {
         mode = modelist.getModeForPath(this.model.get('filename'));
+    }
 
     that.editor = ace.edit("editor");
     that.editor.setReadOnly(true);
@@ -105,8 +109,6 @@ module.exports = BaseView.extend({
   preRender: function() {
     console.log("--- preRender");
     console.log(this.model);
-    //TODO
-    this.model.set('token', 'y0zdzw2xs6n42pj97aby6zugdbmwnyttcjphobhh');
   },
 
   /*
@@ -115,6 +117,11 @@ module.exports = BaseView.extend({
   postRender: function() {
     console.log("--- postRender");
     console.log(this.model);
+
+    var unique = this.model.get('unique');
+    var token = localStorage.getItem('token_' + unique);
+    this.model.set('token', token);
+
     var that = this,
         $editor = $('#editor');
 
