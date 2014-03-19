@@ -66,17 +66,23 @@ module.exports = BaseView.extend({
   },
 
   handleLoadReader: function(evt) {
-    var that = this;
-    that.editor.setValue(that.reader.result);
+    var that = this,
+        body = that.reader.result;
+
+    var diff = JsDiff.diffLines(that._body, body);
+    console.log(diff);
+
+    that._body = body;
+    that.editor.setValue(body);
     that.editor.clearSelection();
-    that.model.set('body', that.reader.result);
+    that.model.set('body', body);
     this.model.save();
   },
 
   setEditor: function() {
     var that  = this,
         theme = 'ace/theme/ambiance';
-        mode  = 'javasctipt';
+        mode  = 'Text';
 
     if (this.model.get('filename')) {
         mode = modelist.getModeForPath(this.model.get('filename'));
