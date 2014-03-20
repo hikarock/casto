@@ -2,9 +2,21 @@ var path = require('path');
 
 var stylesheetsDir = 'assets/stylesheets';
 
+
 module.exports = function(grunt) {
   // Project configuration.
+  grunt.loadNpmTasks('grunt-env');
+
   grunt.initConfig({
+    env: {
+      dev: {
+        NODE_ENV : 'development'
+      },
+      production: {
+        NODE_ENV : 'production'
+      }
+    },
+
     pkg: grunt.file.readJSON('package.json'),
 
     stylus: {
@@ -141,10 +153,10 @@ module.exports = function(grunt) {
   grunt.registerTask('compile', ['handlebars', 'browserify', 'stylus']);
 
   // Run the server and watch for file changes
-  grunt.registerTask('startProduction', ['compile', 'stopProductionNode', 'startProductionNode']);
+  grunt.registerTask('startProduction', ['env:production', 'compile', 'stopProductionNode', 'startProductionNode']);
 
   // Run the server and watch for file changes
-  grunt.registerTask('server', ['compile', 'runNode', 'watch']);
+  grunt.registerTask('server', ['env:dev', 'compile', 'runNode', 'watch']);
 
   // Default task(s).
   grunt.registerTask('default', ['compile']);
