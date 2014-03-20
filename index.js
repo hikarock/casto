@@ -1,5 +1,6 @@
 var express = require('express')
   , rendr = require('rendr')
+  , config = require('config')
   , app = express();
 
 /**
@@ -11,31 +12,10 @@ app.use(express.logger());
 app.use(express.bodyParser());
 
 /**
- * In this simple example, the DataAdapter config, which specifies host, port, etc. of the API
- * to hit, is written inline. In a real world example, you would probably move this out to a
- * config file. Also, if you want more control over the fetching of data, you can pass your own
- * `dataAdapter` object to the call to `rendr.createServer()`.
- */
-var dataAdapterConfig = {
-  'default': {
-    host: 'api.github.com',
-    protocol: 'https'
-  },
-  'travis-ci': {
-    host: 'api.travis-ci.org',
-    protocol: 'https'
-  },
-  'storyboards': {
-    host: 'local.storyboards.jp',
-    protocol: 'http'
-  }
-};
-
-/**
  * Initialize our Rendr server.
  */
 var server = rendr.createServer({
-  dataAdapterConfig: dataAdapterConfig
+  dataAdapterConfig: config.api
 });
 
 /**
