@@ -4,6 +4,8 @@ var BaseView = require('../base'),
 module.exports = BaseView.extend({
   className: 'code_index_view',
 
+  _PUSHER_API_KEY: 'd3adbb2d6866384d7152',
+
   /*
    * 読み込み許可するファイルタイプか？
    */
@@ -59,16 +61,24 @@ module.exports = BaseView.extend({
     }, 250);
 
     that.reader.onload = function(evt) {
-      that.handleLoadReader(evt);
+      that.handleLoadReader();
     };
 
     that.reader.readAsText(file);
   },
 
-  handleLoadReader: function(evt) {
+  handleLoadReader: function(code) {
+
     var that = this,
-        body = that.reader.result,
-        diff = JsDiff.diffLines(that._body, body);
+        body, diff, token;
+
+    if (arguments.length === that.handleLoadReader.length) {
+      body = code;
+    } else {
+      body = that.reader.result;
+    }
+
+    diff = JsDiff.diffLines(that._body, body);
 
     that._body = body;
     that.editor.setValue(body);
@@ -82,7 +92,10 @@ module.exports = BaseView.extend({
     });
 
     that.model.set('body', body);
-    this.model.save();
+    token = that.model.get('token');
+    if (token) {
+      this.model.save();
+    }
   },
 
   setEditor: function() {
@@ -100,6 +113,21 @@ module.exports = BaseView.extend({
     that.editor.setTheme(theme);
     that.editor.setSelectionStyle('line');
     that.editor.getSession().setMode(mode.mode);
+  },
+
+  setPusher: function() {
+    var that = this,
+        token = that.model.get('token'),
+        pusher,
+        channel;
+    if (token) {
+      return;
+    }
+    pusher = new Pusher(that._PUSHER_API_KEY);
+    channel = pusher.subscribe("casto-" + that.model.get('unique'));
+    channel.bind('code-casting', function(code) {
+      that.handleLoadReader(code.body);
+    });
   },
 
   // 読込中のファイルの最終更新日時
@@ -141,6 +169,7 @@ module.exports = BaseView.extend({
     // drag & drop のイベントを追加
     $.event.props.push("dataTransfer");
 
+    that.setPusher();
     that.setEditor();
 
     $editor.on('drop', function(evt) {
@@ -159,5 +188,6 @@ module.exports = BaseView.extend({
     });
   }
 });
+
 
 module.exports.id = 'code/index';
