@@ -1,6 +1,6 @@
 {
-  "name": "rendr-example",
-  "version": "0.0.0",
+  "name": "casto",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "express": "~3",
     "underscore": "~1.5.2",
     "rendr-handlebars": "0.2.0",
-    "rendr": "0.5.0"
+    "rendr": "0.5.0",
+    "forever": "~0.10.11"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
