@@ -10,3 +10,5 @@ public/styles.css
 public/js/*
 .DS_Store
 runtime.json
+.bundle/*
+vendor/*

@@ -114,8 +114,34 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('startProductionNode', function () {
+    grunt.util.spawn({
+      cmd: 'node',
+      args: ['./node_modules/forever/bin/forever', 'start', 'index.js'],
+      opts: {
+        stdio: 'inherit'
+      }
+    }, function () {
+      grunt.fail.fatal(new Error("forever quit"));
+    });
+  });
+
+  grunt.registerTask('stopProductionNode', function () {
+    grunt.util.spawn({
+      cmd: 'node',
+      args: ['./node_modules/forever/bin/forever', 'stop', 'index.js'],
+      opts: {
+        stdio: 'inherit'
+      }
+    }, function () {
+      grunt.fail.fatal(new Error("forever quit"));
+    });
+  });
 
   grunt.registerTask('compile', ['handlebars', 'browserify', 'stylus']);
+
+  // Run the server and watch for file changes
+  grunt.registerTask('startProduction', ['compile', 'stopProductionNode', 'startProductionNode']);
 
   // Run the server and watch for file changes
   grunt.registerTask('server', ['compile', 'runNode', 'watch']);
