@@ -67,14 +67,20 @@ module.exports = BaseView.extend({
 
   handleLoadReader: function(evt) {
     var that = this,
-        body = that.reader.result;
-
-    var diff = JsDiff.diffLines(that._body, body);
-    console.log(diff);
+        body = that.reader.result,
+        diff = JsDiff.diffLines(that._body, body);
 
     that._body = body;
     that.editor.setValue(body);
     that.editor.clearSelection();
+    that.editor.$search.find(that.editor.getSession());
+
+    _.each(diff, function(d) {
+      if (d.added) {
+        that.editor.find(d.value);
+      }
+    });
+
     that.model.set('body', body);
     this.model.save();
   },
@@ -88,10 +94,11 @@ module.exports = BaseView.extend({
         mode = modelist.getModeForPath(this.model.get('filename'));
     }
 
-    that.editor = ace.edit("editor");
+    that.editor = ace.edit('editor');
     that.editor.setReadOnly(true);
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
+    that.editor.setSelectionStyle('line');
     that.editor.getSession().setMode(mode.mode);
   },
 
