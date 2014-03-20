@@ -66,26 +66,39 @@ module.exports = BaseView.extend({
   },
 
   handleLoadReader: function(evt) {
-    var that = this;
-    that.editor.setValue(that.reader.result);
+    var that = this,
+        body = that.reader.result,
+        diff = JsDiff.diffLines(that._body, body);
+
+    that._body = body;
+    that.editor.setValue(body);
     that.editor.clearSelection();
-    that.model.set('body', that.reader.result);
+    that.editor.$search.find(that.editor.getSession());
+
+    _.each(diff, function(d) {
+      if (d.added) {
+        that.editor.find(d.value);
+      }
+    });
+
+    that.model.set('body', body);
     this.model.save();
   },
 
   setEditor: function() {
     var that  = this,
         theme = 'ace/theme/ambiance';
-        mode  = 'javasctipt';
+        mode  = 'Text';
 
     if (this.model.get('filename')) {
         mode = modelist.getModeForPath(this.model.get('filename'));
     }
 
-    that.editor = ace.edit("editor");
+    that.editor = ace.edit('editor');
     that.editor.setReadOnly(true);
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
+    that.editor.setSelectionStyle('line');
     that.editor.getSession().setMode(mode.mode);
   },
 
