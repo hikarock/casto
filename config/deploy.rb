@@ -11,8 +11,8 @@ require 'mina/git'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :domain, 'castory001'
-set :deploy_to, '/home/remper/castory'
-set :repository, 'git@github.com:hikarock/castory.git'
+set :deploy_to, '/home/remper/casto'
+set :repository, 'git@github.com:hikarock/casto.git'
 set :branch, 'master'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
@@ -64,7 +64,7 @@ namespace :rendr do
   end
 
   task :stop do
-    queue 'echo "-----> Start server."'
+    queue 'echo "-----> Stop server."'
     queue! %{
       cd #{deploy_to}/current
       grunt stopProductionNode
