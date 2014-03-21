@@ -84,7 +84,6 @@ task :deploy => :environment do
 
     to :launch do
       invoke :'rendr:install'
-      invoke :'rendr:compile'
       invoke :'rendr:start'
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
