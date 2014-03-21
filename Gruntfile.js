@@ -106,6 +106,14 @@ module.exports = function(grunt) {
         ],
         dest: 'public/testBundle.js'
       }
+    },
+    forever: {
+      app: {
+        options: {
+          index: 'index.js',
+          logDir: 'log'
+        }
+      }
     }
   });
 
@@ -113,6 +121,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-forever');
 
   grunt.registerTask('runNode', function () {
     grunt.util.spawn({
@@ -126,34 +135,10 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('startProductionNode', function () {
-    grunt.util.spawn({
-      cmd: 'node',
-      args: ['./node_modules/forever/bin/forever', 'start', 'index.js'],
-      opts: {
-        stdio: 'inherit'
-      }
-    }, function () {
-      grunt.fail.fatal(new Error("forever quit"));
-    });
-  });
-
-  grunt.registerTask('stopProductionNode', function () {
-    grunt.util.spawn({
-      cmd: 'node',
-      args: ['./node_modules/forever/bin/forever', 'stop', 'index.js'],
-      opts: {
-        stdio: 'inherit'
-      }
-    }, function () {
-      grunt.fail.fatal(new Error("forever quit"));
-    });
-  });
-
   grunt.registerTask('compile', ['handlebars', 'browserify', 'stylus']);
 
   // Run the server and watch for file changes
-  grunt.registerTask('startProduction', ['env:production', 'compile', 'stopProductionNode', 'startProductionNode']);
+  grunt.registerTask('startProduction', ['env:production', 'compile', 'forever:app:restart']);
 
   // Run the server and watch for file changes
   grunt.registerTask('server', ['env:dev', 'compile', 'runNode', 'watch']);
