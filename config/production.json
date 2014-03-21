@@ -1,7 +1,7 @@
 {
   "api":{
     "storyboards":{
-      "host":"www.storyboards.jp",
+      "host":"10.0.3.11",
       "protocol":"http"
     }
   }
