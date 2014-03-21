@@ -47,14 +47,6 @@ namespace :rendr do
     }
   end
 
-  task :compile do
-    queue 'echo "-----> Start compile tasks."'
-    queue! %{
-      cd #{deploy_to}/current
-      grunt compile
-    }
-  end
-
   task :start do
     queue 'echo "-----> Start server."'
     queue! %{
