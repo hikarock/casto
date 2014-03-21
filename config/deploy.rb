@@ -59,7 +59,7 @@ namespace :rendr do
     queue 'echo "-----> Stop server."'
     queue! %{
       cd #{deploy_to}/current
-      grunt stopProductionNode
+      grunt forever:app:stop
     }
   end
 end
