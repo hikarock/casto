@@ -59,7 +59,7 @@ namespace :rendr do
     queue 'echo "-----> Start server."'
     queue! %{
       cd #{deploy_to}/current
-      grunt startProductionNode
+      grunt startProduction
     }
   end
 
@@ -93,7 +93,6 @@ task :deploy => :environment do
     to :launch do
       invoke :'rendr:install'
       invoke :'rendr:compile'
-      invoke :'rendr:stop'
       invoke :'rendr:start'
       queue "touch #{deploy_to}/tmp/restart.txt"
     end
