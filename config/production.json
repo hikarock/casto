@@ -1,7 +1,7 @@
 {
   "api":{
     "storyboards":{
-      "host":"10.0.3.11",
+      "host":"10.0.3.11:10080",
       "protocol":"http"
     }
   }
