@@ -18,7 +18,8 @@
     "rendr": "0.5.0",
     "forever": "~0.10.11",
     "config": "~0.4.35",
-    "grunt-env": "~0.4.1"
+    "grunt-env": "~0.4.1",
+    "grunt-forever": "~0.4.4"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

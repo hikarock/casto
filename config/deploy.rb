@@ -47,14 +47,6 @@ namespace :rendr do
     }
   end
 
-  task :compile do
-    queue 'echo "-----> Start compile tasks."'
-    queue! %{
-      cd #{deploy_to}/current
-      grunt compile
-    }
-  end
-
   task :start do
     queue 'echo "-----> Start server."'
     queue! %{
@@ -67,7 +59,7 @@ namespace :rendr do
     queue 'echo "-----> Stop server."'
     queue! %{
       cd #{deploy_to}/current
-      grunt stopProductionNode
+      grunt forever:app:stop
     }
   end
 end
