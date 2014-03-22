@@ -100,11 +100,11 @@ module.exports = BaseView.extend({
 
   setEditor: function() {
     var that  = this,
-        theme = 'ace/theme/ambiance';
-        mode  = 'Text';
+        theme = 'ace/theme/tomorrow_night_eighties';
+        mode  = 'ace/mode/javascript';
 
     if (this.model.get('filename')) {
-        mode = modelist.getModeForPath(this.model.get('filename'));
+        mode = modelist.getModeForPath(this.model.get('filename')).mode;
     }
 
     that.editor = ace.edit('editor');
@@ -112,7 +112,7 @@ module.exports = BaseView.extend({
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
     that.editor.setSelectionStyle('line');
-    that.editor.getSession().setMode(mode.mode);
+    that.editor.getSession().setMode(mode);
   },
 
   setPusher: function() {
