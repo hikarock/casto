@@ -5,21 +5,20 @@
     <meta charset='utf-8'/>
     <title>casto :: Live coding in your Vim/Emacs.</title>
 
-    <link href="/styles.css" media="screen" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Source+Code+Pro:300,700'>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="/styles.css">
   </head>
 
   <body>
-
     <section id="content" class="container">
       {{{body}}}
     </section>
-
-    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Source+Code+Pro:300,700'>
-    <script src="/mergedAssets.js"></script>
     <script src="//js.pusher.com/2.1/pusher.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
     <script src="/modelist.js"></script>
     <script src="/diff.js"></script>
+    <script src="/mergedAssets.js"></script>
     <script>
     (function() {
       var App = window.App = new (require('app/app'))({{json appData}});

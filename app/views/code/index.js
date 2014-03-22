@@ -47,8 +47,8 @@ module.exports = BaseView.extend({
       return;
     }
 
-    mode = modelist.getModeForPath(file.name);
-    that.editor.getSession().setMode(mode.mode);
+    mode = modelist.getModeForPath(file.name).mode;
+    that.editor.getSession().setMode(mode);
 
     that.reader = new FileReader();
     that.model.set('filename', file.name);
@@ -91,6 +91,11 @@ module.exports = BaseView.extend({
       }
     });
 
+    var volume = localStorage.getItem('setting_volume');
+    if (volume) {
+      type.play();
+    }
+
     that.model.set('body', body);
     token = that.model.get('token');
     if (token) {
@@ -127,6 +132,26 @@ module.exports = BaseView.extend({
     channel = pusher.subscribe("casto-" + that.model.get('unique'));
     channel.bind('code-casting', function(code) {
       that.handleLoadReader(code.body);
+    });
+  },
+
+  setSound: function() {
+    localStorage.removeItem('setting_volume');
+    $('#volume').on('click', function(evt) {
+      evt.preventDefault();
+      if ($(this).find('i').hasClass('fa-volume-up')) {
+        $(this).find('i')
+        .addClass('fa-volume-off')
+        .removeClass('fa-volume-up');
+        $(this).find('span').text('Un Mute');
+        localStorage.removeItem('setting_volume');
+      } else {
+        $(this).find('i')
+        .addClass('fa-volume-up')
+        .removeClass('fa-volume-off');
+        $(this).find('span').text('Mute');
+        localStorage.setItem('setting_volume', 1);
+      }
     });
   },
 
@@ -171,6 +196,12 @@ module.exports = BaseView.extend({
 
     that.setPusher();
     that.setEditor();
+    that.setSound();
+
+    $('#new').on('click', function(evt) {
+      evt.preventDefault();
+      window.open('/a');
+    });
 
     $editor.on('drop', function(evt) {
       evt.preventDefault();
@@ -186,6 +217,7 @@ module.exports = BaseView.extend({
       evt.preventDefault();
       that.handleDragover(evt);
     });
+
   }
 });
 
