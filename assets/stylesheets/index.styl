@@ -49,32 +49,41 @@ html
 #menu
   position: fixed
   height: 20px
-  background-color: $casto-green
+  background-color: #222
   z-index: 99999
   bottom: 0
-  padding: 0 10px 0 10px
+  padding: 0 10px 0 0
   line-height: 20px
   font-size: 12px
-  color: #222
+  color: #999
   width: 100%
+  a
+    color: #999
+    text-decoration: none
   .powerd
     float: right
     font-weight: 300
+    font-family: $casto-font
     color: $casto-green-dark
     a
       color: $casto-green-dark
-      text-decoration: none
+      text-decoration: underline
   ol
     display: inline-block
     padding: 0
     margin: 0
     li
-      &:first-child
-        background-color: $casto-green-dark
-        color: #eee
-        font-weight: 300
       font-family: $casto-font
       font-weight: 700
       margin: 0
       padding: 0 10px 0 10px
       display: table-cell
+      &:first-child
+        background-color: $casto-green-dark
+        color: #eee
+        font-weight: 300
+        a
+          color: #eee
+          text-decoration: none
+      .filename
+        background-color: $casto-green-dark

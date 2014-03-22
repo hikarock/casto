@@ -15,15 +15,14 @@
 </div>
 <div id="menu">
   <ol>
-    <li>{{appName}} v{{version}}</li>
-    {{#if filename}}
-    <li id="filename">{{filename}}</li>
-    {{else}}
-    <li id="filename">{{unique}}</li>
-    {{/if}}
+    <li><a href="/">{{appName}} v{{version}}</a></li>
+    <li><i class="fa fa-cloud"></i> <span id="filename">{{#if filename}}{{filename}}{{else}}{{unique}}{{/if}}</span></li>
+    <li><a href="#" id="new"><i class="fa fa-plus-square"></i> New File</a></li>
+    <li><a href="#" id="volume"><i class="fa fa-volume-off"></i> <span>Un Mute</span></a></li>
   </ol>
   <span class="powerd">
-    Powerd By <a href="{{apiUrl}}" target="_blank">{{apiName}}</a> and <a href="https://github.com/rendrjs/rendr" target="_blank">Rendr</a>.
+    <i class="fa fa-flash"></i> by <a href="{{apiUrl}}" target="_blank">{{apiName}}</a> and <a href="https://github.com/rendrjs/rendr" target="_blank">Rendr</a>.
   </span>
 </div>
+<audio src="/keyboard.mp3" id="type">
 
