@@ -57,11 +57,6 @@ html
   font-size: 12px
   color: #999
   width: 100%
-  a
-    color: #999
-    text-decoration: none
-    &:hover
-      color: $casto-green-dark
   .powerd
     float: right
     font-weight: 300
@@ -75,6 +70,11 @@ html
     padding: 0
     margin: 0
     li
+      &#volume,
+      &#new
+        &:hover
+          color: $casto-green-dark
+          cursor: pointer
       font-family: $casto-font
       font-weight: 700
       margin: 0

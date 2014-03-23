@@ -170,7 +170,7 @@ module.exports = BaseView.extend({
 
   setSound: function() {
     localStorage.removeItem('setting_volume');
-    $('#volume a').on('click', function(evt) {
+    $('#volume').on('click', function(evt) {
       evt.preventDefault();
       if ($(this).find('i').hasClass('fa-volume-up')) {
         $(this).find('i')
@@ -238,7 +238,7 @@ module.exports = BaseView.extend({
     that.setEditor();
     that.setSound();
 
-    $('#new a').on('click', function(evt) {
+    $('#new').on('click', function(evt) {
       evt.preventDefault();
       window.open(that._NEW_FILE_URI);
     });
