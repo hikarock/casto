@@ -60,6 +60,8 @@ html
   a
     color: #999
     text-decoration: none
+    &:hover
+      color: $casto-green-dark
   .powerd
     float: right
     font-weight: 300
@@ -85,5 +87,7 @@ html
         a
           color: #eee
           text-decoration: none
-      .filename
-        background-color: $casto-green-dark
+
+// override
+.ace_gutter
+  color: #666 !important

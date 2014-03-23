@@ -8,7 +8,7 @@ module.exports = RendrView.extend({
     var data = RendrView.prototype.getTemplateData.call(this);
     return _.extend({}, data, {
       version:     0.1,
-      appName:     'casto',
+      appName:     'Casto',
       apiName:     'Storyboards',
       apiUrl:      'http://www.storyboards.jp',
       description: 'hello world.'

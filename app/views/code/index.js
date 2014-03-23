@@ -5,13 +5,19 @@ module.exports = BaseView.extend({
   className: 'code_index_view',
 
   _PUSHER_API_KEY: 'd3adbb2d6866384d7152',
+  _NEW_FILE_URI: '/a',
+  _FILE_MONITORING_INTERVAL: 250,
+
+  // 読込中のファイルの最終更新日時
+  lastMod: '',
 
   /*
    * 読み込み許可するファイルタイプか？
    */
   isValidFileType: function(fileType) {
     var validFileTypes = [
-      '', // .less や .conf が空文字になるため
+      '',                         // .less や .conf が空文字になるため
+      'application/x-javascript', // for Firefox
       'application/json',
       'application/msword',
       'image/svg+xml'
@@ -33,13 +39,36 @@ module.exports = BaseView.extend({
     $('#editor').addClass('over');
   },
 
-  handleDrop: function(evt) {
-    $('#editor').removeClass('over');
+  offDrop: function() {
     var that = this,
-        mode,
-        file = evt.dataTransfer.files[0];
-
+        $editor = $('#editor'),
+        $file = $('#file');
+    $editor.off('drop')
+           .off('dblclick')
+           .off('dragleave')
+           .off('dragover')
+           .removeClass('over');
+    $file.attr('disabled', true);
+    $('#filename i').removeClass('fa-cloud')
+                    .addClass('fa-cloud-upload');
     clearInterval(that.intervalId);
+    $editor.on('drop', function(evt) {
+      evt.preventDefault();
+      alert('Is already connected with the file.');
+    });
+    $editor.on('dragleave', function(evt) {
+      evt.preventDefault();
+    });
+    $editor.on('dragover', function(evt) {
+      evt.preventDefault();
+    });
+  },
+
+  handleDrop: function(file) {
+    var that = this,
+        mode;
+
+    that.offDrop();
 
     if (!that.isValidFileType(file.type)) {
       console.log(file.type);
@@ -52,15 +81,16 @@ module.exports = BaseView.extend({
 
     that.reader = new FileReader();
     that.model.set('filename', file.name);
-    $('#filename').text(file.name);
+    $('#filename span').text(file.name);
 
     that.lastMod = file.lastModifiedDate;
 
     that.intervalId = setInterval(function() {
       that.tick(file);
-    }, 250);
+    }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
+      console.log("reader.onload");
       that.handleLoadReader();
     };
 
@@ -68,9 +98,9 @@ module.exports = BaseView.extend({
   },
 
   handleLoadReader: function(code) {
+    console.log("handleLoadReader");
 
-    var that = this,
-        body, diff, token;
+    var that = this, body, diff;
 
     if (arguments.length === that.handleLoadReader.length) {
       body = code;
@@ -79,11 +109,11 @@ module.exports = BaseView.extend({
     }
 
     diff = JsDiff.diffLines(that._body, body);
+    console.log(diff);
 
     that._body = body;
     that.editor.setValue(body);
     that.editor.clearSelection();
-    that.editor.$search.find(that.editor.getSession());
 
     _.each(diff, function(d) {
       if (d.added) {
@@ -91,14 +121,16 @@ module.exports = BaseView.extend({
       }
     });
 
+    //TODO: diffがなかったらsaveしない/音を鳴らさない
+
     var volume = localStorage.getItem('setting_volume');
     if (volume) {
       type.play();
     }
 
     that.model.set('body', body);
-    token = that.model.get('token');
-    if (token) {
+    if (that.isOwner()) {
+      console.log("save");
       this.model.save();
     }
   },
@@ -122,22 +154,23 @@ module.exports = BaseView.extend({
 
   setPusher: function() {
     var that = this,
-        token = that.model.get('token'),
         pusher,
         channel;
-    if (token) {
+    if (that.isOwner()) {
       return;
     }
     pusher = new Pusher(that._PUSHER_API_KEY);
     channel = pusher.subscribe("casto-" + that.model.get('unique'));
     channel.bind('code-casting', function(code) {
+      console.log("code-casting");
+      console.log(code);
       that.handleLoadReader(code.body);
     });
   },
 
   setSound: function() {
     localStorage.removeItem('setting_volume');
-    $('#volume').on('click', function(evt) {
+    $('#volume a').on('click', function(evt) {
       evt.preventDefault();
       if ($(this).find('i').hasClass('fa-volume-up')) {
         $(this).find('i')
@@ -155,26 +188,37 @@ module.exports = BaseView.extend({
     });
   },
 
-  // 読込中のファイルの最終更新日時
-  lastMod: '',
-
   tick: function(file) {
     var that = this;
     if (file && file.lastModifiedDate.getTime() != that.lastMod.getTime()) {
       that.lastMod = file.lastModifiedDate;
+      console.log('tick');
       that.handleLoadReader();
       that.reader.readAsText(file);
     }
   },
 
-  initialize: function() {
-    console.log("--- initialize");
-    //console.log(this.model);
+  isOwner: function() {
+    var unique = this.model.get('unique'),
+        token  = localStorage.getItem('token_' + unique);
+    if (token) {
+      return true;
+    }
+    return false;
   },
 
+  /*
+   * Environment: shared.
+   */
+  initialize: function() {
+    console.log("--- initialize");
+  },
+
+  /*
+   * Environment: shared.
+   */
   preRender: function() {
     console.log("--- preRender");
-    console.log(this.model);
   },
 
   /*
@@ -182,7 +226,6 @@ module.exports = BaseView.extend({
    */
   postRender: function() {
     console.log("--- postRender");
-    console.log(this.model);
 
     var unique = this.model.get('unique');
     var token = localStorage.getItem('token_' + unique);
@@ -191,21 +234,36 @@ module.exports = BaseView.extend({
     var that = this,
         $editor = $('#editor');
 
-    // drag & drop のイベントを追加
-    $.event.props.push("dataTransfer");
-
     that.setPusher();
     that.setEditor();
     that.setSound();
 
-    $('#new').on('click', function(evt) {
+    $('#new a').on('click', function(evt) {
       evt.preventDefault();
-      window.open('/a');
+      window.open(that._NEW_FILE_URI);
     });
+
+    if (!that.isOwner()) {
+      return;
+    }
+
+    $editor.on('dblclick', function(evt) {
+      evt.preventDefault();
+      $('#file').click();
+    });
+
+    $('#file').on('change', function(evt) {
+      var file = evt.target.files[0];
+      that.handleDrop(file);
+    });
+
+    // drag & drop のイベントを追加
+    $.event.props.push("dataTransfer");
 
     $editor.on('drop', function(evt) {
       evt.preventDefault();
-      that.handleDrop(evt);
+      var file = evt.dataTransfer.files[0];
+      that.handleDrop(file);
     });
 
     $editor.on('dragleave', function(evt) {
@@ -217,9 +275,7 @@ module.exports = BaseView.extend({
       evt.preventDefault();
       that.handleDragover(evt);
     });
-
   }
 });
-
 
 module.exports.id = 'code/index';
