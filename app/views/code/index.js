@@ -49,8 +49,7 @@ module.exports = BaseView.extend({
            .off('dragover')
            .removeClass('over');
     $file.attr('disabled', true);
-    $('#filename i').removeClass('fa-cloud')
-                    .addClass('fa-cloud-upload');
+    $('#filename i').addClass('fa-spin');
     clearInterval(that.intervalId);
     $editor.on('drop', function(evt) {
       evt.preventDefault();
