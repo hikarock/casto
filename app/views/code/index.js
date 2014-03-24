@@ -114,9 +114,17 @@ module.exports = BaseView.extend({
     that.editor.setValue(body);
     that.editor.clearSelection();
 
+    var removedFlg = false;
     _.each(diff, function(d) {
+      if (removedFlg) {
+        var value = d.value.split(/\r|\r\n|\n/)[0];
+        that.editor.find(value);
+      }
       if (d.added) {
         that.editor.find(d.value);
+      }
+      if (d.removed) {
+        removedFlg = true;
       }
     });
 
