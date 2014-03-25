@@ -1,5 +1,6 @@
 [home-view]
 body
+  overflow: hidden
   background-color: #222
   color: $casto-green
   font-family: $casto-font
@@ -7,10 +8,34 @@ body
     text-align: center
     margin-top: 100px
     font-weight: 300
+    font-size: 12px
   p
     text-align: center
     line-height: 1.8em
-    margin-top: 50px
+    margin-top: 30px
+  ol#line-number
+    overflow: hidden
+    margin: 0
+    padding-top: 0
+    padding-left: 4px
+    padding-right: 12px
+    position: absolute
+    left: 0
+    top: 0
+    font-weight: 300
+    font-size: 14px
+    background-color: #272727
+    color: #666
+    font-family: $casto-font
+    counter-reset: item
+    list-style-type: none
+    li
+      display: block
+      text-align: right
+    li:before
+      content: counter(item) "  "
+      counter-increment: item
+      height: 18px
   div.start
     text-align: center
     font-weight: 300
