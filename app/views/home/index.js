@@ -5,7 +5,7 @@ module.exports = BaseView.extend({
   postRender: function() {
     $('#start').on('click', function(evt) {
       evt.preventDefault();
-      location.href = '/a';
+      location.href = $(this).attr('href');
     });
   }
 });
