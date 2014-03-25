@@ -115,6 +115,8 @@ module.exports = BaseView.extend({
     that.editor.clearSelection();
 
     var removedFlg = false;
+    var volume = localStorage.getItem('setting_volume');
+
     _.each(diff, function(d) {
       if (removedFlg) {
         var value = d.value.split(/\r|\r\n|\n/)[0];
@@ -122,18 +124,20 @@ module.exports = BaseView.extend({
       }
       if (d.added) {
         that.editor.find(d.value);
+        if (volume) {
+          added.play();
+        }
       }
       if (d.removed) {
         removedFlg = true;
+        if (volume) {
+          removed.play();
+        }
       }
     });
 
     //TODO: diffがなかったらsaveしない/音を鳴らさない
 
-    var volume = localStorage.getItem('setting_volume');
-    if (volume) {
-      type.play();
-    }
 
     that.model.set('body', body);
     if (that.isOwner()) {
