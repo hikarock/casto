@@ -17,14 +17,14 @@
   <ol>
     <li>{{appName}} v{{version}}</li>
     <li id="filename"><i class="fa fa-asterisk"></i> <span>{{#if filename}}{{filename}}{{else}}{{unique}}{{/if}}</span></li>
-    <li id="new"><i class="fa fa-plus-square"></i> <span>New File</span></li>
     <li id="volume"><i class="fa fa-volume-up"></i> <span>Mute</span></li>
+    <li id="new"><i class="fa fa-plus-square"></i> <span>New File</span></li>
   </ol>
   <span class="powerd">
     <i class="fa fa-flash"></i> by <a href="{{apiUrl}}" target="_blank">{{apiName}}</a> and <a href="https://github.com/rendrjs/rendr" target="_blank">Rendr</a>.
   </span>
 </div>
-<audio src="/added.mp3" id="added">
-<audio src="/removed.mp3" id="removed">
+<audio src="/sounds/added.mp3" id="added">
+<audio src="/sounds/removed.mp3" id="removed">
 <input type="file" id="file">
 
