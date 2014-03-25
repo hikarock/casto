@@ -180,7 +180,6 @@ module.exports = BaseView.extend({
   },
 
   setSound: function() {
-    localStorage.removeItem('setting_volume');
     $('#volume').on('click', function(evt) {
       evt.preventDefault();
       if ($(this).find('i').hasClass('fa-volume-up')) {
@@ -188,7 +187,7 @@ module.exports = BaseView.extend({
         .addClass('fa-volume-off')
         .removeClass('fa-volume-up');
         $(this).find('span').text('Un Mute');
-        localStorage.removeItem('setting_volume');
+        localStorage.setItem('setting_volume', 0);
       } else {
         $(this).find('i')
         .addClass('fa-volume-up')
@@ -197,6 +196,12 @@ module.exports = BaseView.extend({
         localStorage.setItem('setting_volume', 1);
       }
     });
+
+    if (localStorage.getItem('setting_volume') === null) {
+      localStorage.setItem('setting_volume', 1);
+    } else {
+      localStorage.setItem('setting_volume', 0);
+    }
   },
 
   tick: function(file) {
