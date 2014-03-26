@@ -10,6 +10,7 @@ module.exports = BaseView.extend({
 
   // 読込中のファイルの最終更新日時
   lastMod: '',
+  _code: '',
 
   /*
    * 読み込み許可するファイルタイプか？
@@ -89,37 +90,47 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
-      console.log("reader.onload");
-      that.handleLoadReader();
+      that.save(that.reader.result);
     };
 
     that.reader.readAsText(file);
   },
 
-  handleLoadReader: function(code) {
-    console.log("handleLoadReader");
+  save: function(code) {
+    var that = this;
 
-    var that = this, body, diff;
-
-    if (arguments.length === that.handleLoadReader.length) {
-      body = code;
-    } else {
-      body = that.reader.result;
+    if (!that.diffHighlight(code)) {
+      return;
     }
 
-    diff = JsDiff.diffLines(that._body, body);
-    console.log(diff);
+    that.model.set('body', code);
 
-    that._body = body;
-    that.editor.setValue(body);
+    if (that.isOwner()) {
+      this.model.save();
+    }
+  },
+
+  /*
+   * 変更箇所をハイライトする
+   */
+  diffHighlight: function(code) {
+    var that = this, diff, volume, removedFlg = false;
+
+    diff = JsDiff.diffLines(that._code, code);
+    that._code = code;
+    that.editor.setValue(code);
     that.editor.clearSelection();
 
-    var removedFlg = false;
-    var volume = localStorage.getItem('setting_volume');
+    if (diff.length === 1) {
+      return false;
+    }
+
+    volume = localStorage.getItem('setting_volume');
 
     _.each(diff, function(d) {
+      var value;
       if (removedFlg) {
-        var value = d.value.split(/\r|\r\n|\n/)[0];
+        value = d.value.split(/\r|\r\n|\n/)[0];
         that.editor.find(value);
       }
       if (d.added) {
@@ -136,14 +147,7 @@ module.exports = BaseView.extend({
       }
     });
 
-    //TODO: diffがなかったらsaveしない/音を鳴らさない
-
-
-    that.model.set('body', body);
-    if (that.isOwner()) {
-      console.log("save");
-      this.model.save();
-    }
+    return true;
   },
 
   setEditor: function() {
@@ -173,9 +177,7 @@ module.exports = BaseView.extend({
     pusher = new Pusher(that._PUSHER_API_KEY);
     channel = pusher.subscribe("casto-" + that.model.get('unique'));
     channel.bind('code-casting', function(code) {
-      console.log("code-casting");
-      console.log(code);
-      that.handleLoadReader(code.body);
+      that.save(code.body);
     });
   },
 
@@ -204,12 +206,11 @@ module.exports = BaseView.extend({
     }
   },
 
+  // see also: http://stackoverflow.com/a/14284215
   tick: function(file) {
     var that = this;
     if (file && file.lastModifiedDate.getTime() != that.lastMod.getTime()) {
       that.lastMod = file.lastModifiedDate;
-      console.log('tick');
-      that.handleLoadReader();
       that.reader.readAsText(file);
     }
   },
