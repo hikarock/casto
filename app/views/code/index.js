@@ -66,7 +66,8 @@ module.exports = BaseView.extend({
 
   handleDrop: function(file) {
     var that = this,
-        mode;
+        mode,
+        init = true;
 
     that.offDrop();
 
@@ -90,16 +91,20 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
-      that.save(that.reader.result);
+      that.save(that.reader.result, init);
+      init = false;
     };
 
     that.reader.readAsText(file);
   },
 
-  save: function(code) {
+  save: function(code, init) {
     var that = this;
 
-    if (!that.diffHighlight(code)) {
+    that.editor.setValue(code);
+    that.editor.clearSelection();
+
+    if (!init && !that.diffHighlight(code)) {
       return;
     }
 
@@ -118,8 +123,6 @@ module.exports = BaseView.extend({
 
     diff = JsDiff.diffLines(that._code, code);
     that._code = code;
-    that.editor.setValue(code);
-    that.editor.clearSelection();
 
     if (diff.length === 1) {
       return false;
