@@ -11,7 +11,7 @@ module.exports = RendrView.extend({
       appName:     'Casto',
       apiName:     'Storyboards',
       apiUrl:      'http://www.storyboards.jp',
-      description: 'Live coding, try on your<br>(Vim|Emacs|Xcode|Sublime Text).'
+      description: 'Live coding in browse, using text editor.'
     });
   }
 });
