@@ -104,7 +104,7 @@ module.exports = BaseView.extend({
     that.editor.setValue(code);
     that.editor.clearSelection();
 
-    if (!init && !that.diffHighlight(code)) {
+    if (!that.diffHighlight(code) && !init) {
       return;
     }
 
@@ -119,7 +119,8 @@ module.exports = BaseView.extend({
    * 変更箇所をハイライトする
    */
   diffHighlight: function(code) {
-    var that = this, diff, volume, removedFlg = false;
+    var that = this, diff, volume, value, i, max, d,
+        removedFlg = false;
 
     diff = JsDiff.diffLines(that._code, code);
     that._code = code;
@@ -130,8 +131,8 @@ module.exports = BaseView.extend({
 
     volume = localStorage.getItem('setting_volume');
 
-    _.each(diff, function(d) {
-      var value;
+    for (i = 0, max = diff.length; i < max; i++) {
+      d = diff[i];
       if (removedFlg) {
         value = d.value.split(/\r|\r\n|\n/)[0];
         that.editor.find(value);
@@ -140,15 +141,17 @@ module.exports = BaseView.extend({
         that.editor.find(d.value);
         if (volume) {
           added.play();
+          break;
         }
       }
       if (d.removed) {
         removedFlg = true;
         if (volume) {
           removed.play();
+          break;
         }
       }
-    });
+    }
 
     return true;
   },
