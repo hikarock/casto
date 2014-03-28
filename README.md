@@ -11,7 +11,7 @@
 [![Build Status](https://travis-ci.org/hikarock/casto.svg?branch=master)](https://travis-ci.org/hikarock/casto)
 
 
-### Casto
+## Casto
 
 Live coding in browse, using text editor.
 
@@ -20,3 +20,6 @@ Live coding in browse, using text editor.
 - Twitter
  - https://twitter.com/__casto__
 
+## Licence
+
+MIT
