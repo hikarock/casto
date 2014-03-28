@@ -8,3 +8,15 @@
 
 ```
 
+[![Build Status](https://travis-ci.org/hikarock/casto.svg?branch=master)](https://travis-ci.org/hikarock/casto)
+
+
+### Casto
+
+Live coding in browse, using text editor.
+
+- URL
+  - http://ca.storyboards.jp
+- Twitter
+ - https://twitter.com/__casto__
+
