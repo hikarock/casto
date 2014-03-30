@@ -24,7 +24,13 @@
     <i class="fa fa-flash"></i> by <a href="{{apiUrl}}" target="_blank">{{apiName}}</a> and <a href="https://github.com/rendrjs/rendr" target="_blank">Rendr</a>.
   </span>
 </div>
-<audio src="/sounds/added.mp3" preload="auto" id="added"></audio>
-<audio src="/sounds/removed.mp3" preload="auto" id="removed"></audio>
+<audio preload="auto" id="added">
+  <source src="/sounds/added.ogg" type="audio/ogg">
+  <source src="/sounds/added.mp3" type="audio/mpeg">
+</audio>
+<audio preload="auto" id="removed">
+  <source src="/sounds/removed.ogg" type="audio/ogg">
+  <source src="/sounds/removed.mp3" type="audio/mpeg">
+</audio>
 <input type="file" id="file">
 
