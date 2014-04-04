@@ -28,10 +28,6 @@ var server = rendr.createServer({
   */
 app.use(server);
 
-app.use(function(req, res, next){
-  res.send(404).render('error/404');
-});
-
 /**
  * Start the Express server.
  */
