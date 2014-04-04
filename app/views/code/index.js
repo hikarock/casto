@@ -215,7 +215,13 @@ module.exports = BaseView.extend({
   // see also: http://stackoverflow.com/a/14284215
   tick: function(file) {
     var that = this;
-    if (file && file.lastModifiedDate.getTime() != that.lastMod.getTime()) {
+    if (!file) {
+      return;
+    }
+    if (that.isFirefox()) {
+      // Firefoxだと更新日時が変わらないため常にファイルを読み込む
+      that.reader.readAsText(file);
+    } else if (file.lastModifiedDate.getTime() != that.lastMod.getTime()) {
       that.lastMod = file.lastModifiedDate;
       that.reader.readAsText(file);
     }
@@ -228,6 +234,13 @@ module.exports = BaseView.extend({
       return true;
     }
     return false;
+  },
+
+  /*
+   * Firefoxか？
+   */
+  isFirefox: function() {
+    return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
   },
 
   /*
