@@ -17,10 +17,12 @@ app.use(express.bodyParser());
 var server = rendr.createServer({
   dataAdapterConfig: config.api,
   errorHandler: function (err, req, res, next){
-    res.send(404);
+    res.status(503);
+    res.redirect('503');
   },
   notFoundHandler: function (req, res, next){
-    res.send(404);
+    res.status(404);
+    res.redirect('404');
   }
 });
 
