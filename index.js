@@ -15,7 +15,13 @@ app.use(express.bodyParser());
  * Initialize our Rendr server.
  */
 var server = rendr.createServer({
-  dataAdapterConfig: config.api
+  dataAdapterConfig: config.api,
+  errorHandler: function (err, req, res, next){
+    res.send(404);
+  },
+  notFoundHandler: function (req, res, next){
+    res.send(404);
+  }
 });
 
 /**
