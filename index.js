@@ -21,7 +21,7 @@ var server = rendr.createServer({
     res.redirect('503');
   },
   notFoundHandler: function (req, res, next){
-    res.send(404);
+    res.status(404);
     res.redirect('404');
   }
 });
