@@ -18,15 +18,12 @@ var server = rendr.createServer({
   dataAdapterConfig: config.api,
   errorHandler: function (err, req, res, next){
     if (err.status == 404) {
-      res.status(404);
       res.redirect('404');
     } else {
-      res.status(503);
       res.redirect('503');
     }
   },
   notFoundHandler: function (req, res, next){
-    res.status(404);
     res.redirect('404');
   }
 });
