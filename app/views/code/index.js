@@ -173,9 +173,11 @@ module.exports = BaseView.extend({
     that.editor.setSelectionStyle('line');
     that.editor.getSession().setMode(mode);
 
-    if (lineNumber) {
-      that.editor.gotoLine(lineNumber, 0, true);
-    }
+    setTimeout(function(){
+      if (lineNumber) {
+        that.editor.gotoLine(lineNumber, 0, true);
+      }
+    }, 1000);
 
     that.editor.on('click', function() {
       var pos = that.editor.getCursorPosition();
