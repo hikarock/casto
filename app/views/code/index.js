@@ -171,13 +171,14 @@ module.exports = BaseView.extend({
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
     that.editor.setSelectionStyle('line');
-    that.editor.getSession().setMode(mode);
 
-    setTimeout(function(){
+    that.editor.getSession().on('changeMode', function() {
       if (lineNumber) {
         that.editor.gotoLine(lineNumber, 0, true);
       }
-    }, 1000);
+    });
+
+    that.editor.getSession().setMode(mode);
 
     that.editor.on('click', function() {
       var pos = that.editor.getCursorPosition();
