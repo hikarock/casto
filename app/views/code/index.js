@@ -119,7 +119,7 @@ module.exports = BaseView.extend({
    * 変更箇所をハイライトする
    */
   diffHighlight: function(code) {
-    var that = this, diff, volume, value, i, max, d,
+    var that = this, diff, volume, value, i, max, d, pos,
         removedFlg = false;
 
     diff = JsDiff.diffLines(that._code, code);
@@ -152,6 +152,9 @@ module.exports = BaseView.extend({
         }
       }
     }
+
+    pos = that.editor.getCursorPosition();
+    location.hash = '#L' + pos.row;
 
     return true;
   },
