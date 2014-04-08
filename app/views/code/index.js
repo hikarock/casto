@@ -158,8 +158,9 @@ module.exports = BaseView.extend({
 
   setEditor: function() {
     var that  = this,
-        theme = 'ace/theme/tomorrow_night_eighties';
-        mode  = 'ace/mode/javascript';
+        theme = 'ace/theme/tomorrow_night_eighties',
+        mode  = 'ace/mode/javascript',
+        lineNumber = that.getLineNumber();
 
     if (this.model.get('filename')) {
         mode = modelist.getModeForPath(this.model.get('filename')).mode;
@@ -171,6 +172,24 @@ module.exports = BaseView.extend({
     that.editor.setTheme(theme);
     that.editor.setSelectionStyle('line');
     that.editor.getSession().setMode(mode);
+
+    if (lineNumber) {
+      that.editor.gotoLine(lineNumber, 0, true);
+    }
+
+    that.editor.on('click', function() {
+      var pos = that.editor.getCursorPosition();
+      location.hash = '#L' + (pos.row + 1);
+    });
+  },
+
+  getLineNumber: function() {
+    var hash = location.hash, num;
+    if (hash.match(/^#L[0-9]*$/i)) {
+      num = hash.replace(/^#L/i, '');
+      return num;
+    }
+    return false;
   },
 
   setPusher: function() {
