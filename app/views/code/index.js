@@ -91,6 +91,7 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
+      history.pushState('', document.title, window.location.pathname);
       that.save(that.reader.result, init);
       init = false;
     };
@@ -119,7 +120,7 @@ module.exports = BaseView.extend({
    * 変更箇所をハイライトする
    */
   diffHighlight: function(code) {
-    var that = this, diff, volume, value, i, max, d,
+    var that = this, diff, volume, value, i, max, d, pos,
         removedFlg = false;
 
     diff = JsDiff.diffLines(that._code, code);
@@ -153,13 +154,17 @@ module.exports = BaseView.extend({
       }
     }
 
+    pos = that.editor.getCursorPosition();
+    location.hash = '#L' + pos.row;
+
     return true;
   },
 
   setEditor: function() {
     var that  = this,
-        theme = 'ace/theme/tomorrow_night_eighties';
-        mode  = 'ace/mode/javascript';
+        theme = 'ace/theme/tomorrow_night_eighties',
+        mode  = 'ace/mode/javascript',
+        lineNumber = that.getLineNumber();
 
     if (this.model.get('filename')) {
         mode = modelist.getModeForPath(this.model.get('filename')).mode;
@@ -170,7 +175,28 @@ module.exports = BaseView.extend({
     that.editor.setPrintMarginColumn(false);
     that.editor.setTheme(theme);
     that.editor.setSelectionStyle('line');
+
+    that.editor.getSession().on('changeMode', function() {
+      if (lineNumber) {
+        that.editor.gotoLine(lineNumber, 0, true);
+      }
+    });
+
     that.editor.getSession().setMode(mode);
+
+    that.editor.on('click', function() {
+      var pos = that.editor.getCursorPosition();
+      location.hash = '#L' + (pos.row + 1);
+    });
+  },
+
+  getLineNumber: function() {
+    var hash = location.hash, num;
+    if (hash.match(/^#L[0-9]*$/i)) {
+      num = hash.replace(/^#L/i, '');
+      return num;
+    }
+    return false;
   },
 
   setPusher: function() {
