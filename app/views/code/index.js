@@ -91,6 +91,7 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
+      history.pushState('', document.title, window.location.pathname);
       that.save(that.reader.result, init);
       init = false;
     };
