@@ -98,8 +98,8 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
-      history.pushState('', document.title, window.location.pathname);
       that.save(that.reader.result, init);
+      history.pushState('', document.title, location.pathname);
       init = false;
     };
 
@@ -134,6 +134,9 @@ module.exports = BaseView.extend({
     that._code = code;
 
     if (diff.length === 1) {
+      if (that.isFirefox) {
+        that.editor.find(that._lastDiffLine);
+      }
       return false;
     }
 
@@ -142,6 +145,7 @@ module.exports = BaseView.extend({
     for (i = 0, max = diff.length; i < max; i++) {
       d = diff[i];
       if (d.added) {
+        that._lastDiffLine = d.value;
         that.editor.find(d.value);
         if (volume === '1') {
           added.play();
@@ -159,6 +163,7 @@ module.exports = BaseView.extend({
     if (removedFlg && i + 1 < d.length) {
       d = diff[i + 1];
       value = d.value.split(/\r|\r\n|\n/)[0];
+      that._lastDiffLine = value;
       that.editor.find(value);
     }
 
