@@ -127,7 +127,6 @@ module.exports = BaseView.extend({
    * 変更箇所をハイライトする
    */
   diffHighlight: function(code) {
-    console.log(code.length);
     var that = this, diff, volume, value, i, max, d, pos,
         removedFlg = false;
 
