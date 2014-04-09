@@ -80,3 +80,21 @@ html
 // override
 .ace_gutter
   color: #666 !important
+
+.message
+  &.connected
+    background-color: $casto-green-dark
+  &.disconnected
+    background-color: $casto-yellow-dark
+    &.over
+      background-color: $casto-green
+  display: none
+  opacity: 0.9
+  z-index: 99999
+  position: absolute
+  padding: 30px
+  top: 0
+  width: 100%
+  text-align: center
+  color: #fff
+
