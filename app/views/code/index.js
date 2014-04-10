@@ -33,33 +33,34 @@ module.exports = BaseView.extend({
   },
 
   handleDragleave: function(evt) {
-    $('#editor').removeClass('over');
+    $('#editor, .disconnected').removeClass('over');
   },
 
   handleDragover: function(evt) {
-    $('#editor').addClass('over');
+    $('#editor, .disconnected').addClass('over');
   },
 
   offDrop: function() {
-    var that = this,
+    var that    = this,
+        $body   = $('body'),
         $editor = $('#editor'),
-        $file = $('#file');
-    $editor.off('drop')
-           .off('dblclick')
-           .off('dragleave')
-           .off('dragover')
-           .removeClass('over');
+        $file   = $('#file');
+
+    $body.off('drop')
+         .off('dblclick')
+         .off('dragleave')
+         .off('dragover');
+    $('#editor, .disconnected').removeClass('over');
+
     $file.attr('disabled', true);
-    $('#filename i').addClass('fa-spin');
+    $('#filename i').removeClass('fa-unlink').addClass('fa-link');
     clearInterval(that.intervalId);
-    $editor.on('drop', function(evt) {
+    $body.on('drop', function(evt) {
       evt.preventDefault();
       alert('Is already connected with the file.');
-    });
-    $editor.on('dragleave', function(evt) {
+    }).on('dragleave', function(evt) {
       evt.preventDefault();
-    });
-    $editor.on('dragover', function(evt) {
+    }).on('dragover', function(evt) {
       evt.preventDefault();
     });
   },
@@ -69,13 +70,19 @@ module.exports = BaseView.extend({
         mode,
         init = true;
 
-    that.offDrop();
-
     if (!that.isValidFileType(file.type)) {
       console.log(file.type);
       alert('Only text file.');
       return;
     }
+
+    that.offDrop();
+    $('.disconnected').hide();
+    $('.connected').show(0, function() {
+      setTimeout(function() {
+        $('.connected').fadeOut();
+      }, 5000);
+    });
 
     mode = modelist.getModeForPath(file.name).mode;
     that.editor.getSession().setMode(mode);
@@ -91,8 +98,8 @@ module.exports = BaseView.extend({
     }, that._FILE_MONITORING_INTERVAL);
 
     that.reader.onload = function(evt) {
-      history.pushState('', document.title, window.location.pathname);
       that.save(that.reader.result, init);
+      history.pushState('', document.title, location.pathname);
       init = false;
     };
 
@@ -127,6 +134,9 @@ module.exports = BaseView.extend({
     that._code = code;
 
     if (diff.length === 1) {
+      if (that.isFirefox) {
+        that.editor.find(that._lastDiffLine);
+      }
       return false;
     }
 
@@ -134,24 +144,27 @@ module.exports = BaseView.extend({
 
     for (i = 0, max = diff.length; i < max; i++) {
       d = diff[i];
-      if (removedFlg) {
-        value = d.value.split(/\r|\r\n|\n/)[0];
-        that.editor.find(value);
-      }
       if (d.added) {
+        that._lastDiffLine = d.value;
         that.editor.find(d.value);
-        if (volume) {
+        if (volume === '1') {
           added.play();
           break;
         }
       }
       if (d.removed) {
         removedFlg = true;
-        if (volume) {
+        if (volume === '1') {
           removed.play();
           break;
         }
       }
+    }
+    if (removedFlg && i + 1 < d.length) {
+      d = diff[i + 1];
+      value = d.value.split(/\r|\r\n|\n/)[0];
+      that._lastDiffLine = value;
+      that.editor.find(value);
     }
 
     pos = that.editor.getCursorPosition();
@@ -214,28 +227,42 @@ module.exports = BaseView.extend({
   },
 
   setSound: function() {
-    $('#volume').on('click', function(evt) {
+    var that = this,
+        $volume = $('#volume');
+    $volume.on('click', function(evt) {
       evt.preventDefault();
-      if ($(this).find('i').hasClass('fa-volume-up')) {
-        $(this).find('i')
-        .addClass('fa-volume-off')
-        .removeClass('fa-volume-up');
-        $(this).find('span').text('Un Mute');
-        localStorage.setItem('setting_volume', 0);
+      var volume = localStorage.getItem('setting_volume');
+      if (volume === '1') {
+        that.setMute();
       } else {
-        $(this).find('i')
-        .addClass('fa-volume-up')
-        .removeClass('fa-volume-off');
-        $(this).find('span').text('Mute');
-        localStorage.setItem('setting_volume', 1);
+        that.setUnMute();
       }
     });
 
-    if (localStorage.getItem('setting_volume') === null) {
-      localStorage.setItem('setting_volume', 1);
+    var volume = localStorage.getItem('setting_volume');
+    if (volume === null) {
+      that.setUnMute();
     } else {
-      localStorage.setItem('setting_volume', 0);
+      if (volume === '0') {
+        that.setMute();
+      } else {
+        that.setUnMute();
+      }
     }
+  },
+
+  setMute: function() {
+    var $volume = $('#volume');
+    $volume.find('i').addClass('fa-volume-off').removeClass('fa-volume-up');
+    $volume.find('span').text('Un Mute');
+    localStorage.setItem('setting_volume', '0');
+  },
+
+  setUnMute: function() {
+    var $volume = $('#volume');
+    $volume.find('i').addClass('fa-volume-up').removeClass('fa-volume-off');
+    $volume.find('span').text('Mute');
+    localStorage.setItem('setting_volume', '1');
   },
 
   // see also: http://stackoverflow.com/a/14284215
@@ -289,12 +316,14 @@ module.exports = BaseView.extend({
   postRender: function() {
     console.log("--- postRender");
 
-    var unique = this.model.get('unique');
-    var token = localStorage.getItem('token_' + unique);
-    this.model.set('token', token);
-
-    var that = this,
+    var unique  = this.model.get('unique'),
+        token   = localStorage.getItem('token_' + unique),
+        that    = this,
+        $body   = $('body'),
         $editor = $('#editor');
+
+    this.model.set('token', token);
+    that._code = this.model.get('body');
 
     that.setPusher();
     that.setEditor();
@@ -306,7 +335,20 @@ module.exports = BaseView.extend({
     });
 
     if (!that.isOwner()) {
+      $('#filename i').removeClass('fa-unlink').addClass('fa-cloud-download');
+      $body.on('drop', function(evt) {
+        evt.preventDefault();
+        alert('You do not have permission.');
+      }).on('dragleave', function(evt) {
+        evt.preventDefault();
+      }).on('dragover', function(evt) {
+        evt.preventDefault();
+      });
       return;
+    }
+
+    if (that.model.get('body')) {
+      $('.disconnected').show();
     }
 
     $editor.on('dblclick', function(evt) {
@@ -322,18 +364,18 @@ module.exports = BaseView.extend({
     // drag & drop のイベントを追加
     $.event.props.push("dataTransfer");
 
-    $editor.on('drop', function(evt) {
+    $body.on('drop', function(evt) {
       evt.preventDefault();
       var file = evt.dataTransfer.files[0];
       that.handleDrop(file);
     });
 
-    $editor.on('dragleave', function(evt) {
+    $body.on('dragleave', function(evt) {
       evt.preventDefault();
       that.handleDragleave(evt);
     });
 
-    $editor.on('dragover', function(evt) {
+    $body.on('dragover', function(evt) {
       evt.preventDefault();
       that.handleDragover(evt);
     });
