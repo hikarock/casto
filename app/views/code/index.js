@@ -335,7 +335,7 @@ module.exports = BaseView.extend({
     });
 
     if (!that.isOwner()) {
-      $('#filename i').removeClass('fa-unlink').addClass('fa-spin fa-refresh');
+      $('#filename i').removeClass('fa-unlink').addClass('fa-cloud-download');
       $body.on('drop', function(evt) {
         evt.preventDefault();
         alert('You do not have permission.');
