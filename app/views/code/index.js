@@ -70,6 +70,12 @@ module.exports = BaseView.extend({
         mode,
         init = true;
 
+    if (!that.isValidFileType(file.type)) {
+      console.log(file.type);
+      alert('Only text file.');
+      return;
+    }
+
     that.offDrop();
     $('.disconnected').hide();
     $('.connected').show(0, function() {
@@ -77,12 +83,6 @@ module.exports = BaseView.extend({
         $('.connected').fadeOut();
       }, 5000);
     });
-
-    if (!that.isValidFileType(file.type)) {
-      console.log(file.type);
-      alert('Only text file.');
-      return;
-    }
 
     mode = modelist.getModeForPath(file.name).mode;
     that.editor.getSession().setMode(mode);
