@@ -22,7 +22,7 @@ Live coding in browse, using text editor.
 
 ### Overview
 
-![](http://f.st-hatena.com/images/fotolife/h/hideack/20140409/20140409234026.png)
+![](https://raw.githubusercontent.com/hikarock/casto/master/public/images/overview.png)
 
 ### Licence
 
