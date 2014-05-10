@@ -43,7 +43,7 @@ namespace :rendr do
     queue 'echo "-----> Start npm install tasks."'
     queue! %{
       cd #{deploy_to}/current
-      npm install
+      npm install --registry http://10.0.3.14:10080/
     }
   end
 
