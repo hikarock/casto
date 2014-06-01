@@ -5,6 +5,10 @@ module.exports = Base.extend({
     if (attrs.comment.length > 512) {
       return "comment length too large.";
     }
+
+    if (typeof attrs.owner != 'boolean') {
+      return "need owner flag.";
+    }
   },
   url: '/castoapi/comment/:unique',
   api: 'storyboards',
