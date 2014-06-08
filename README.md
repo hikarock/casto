@@ -24,6 +24,10 @@ Live coding in browse, using text editor.
 
 ![](https://raw.githubusercontent.com/hikarock/casto/master/public/images/overview.png)
 
+### CLI tool for Casto
+
+[hideack/casto-cli](https://github.com/hideack/casto-cli)
+
 ### Licence
 
 MIT
