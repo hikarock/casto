@@ -28,6 +28,8 @@ Live coding in browse, using text editor.
 
 [hideack/casto-cli](https://github.com/hideack/casto-cli)
 
+[![NPM](https://nodei.co/npm/casto.png)](https://nodei.co/npm/casto/)
+
 ### Licence
 
 MIT
