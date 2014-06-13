@@ -10,6 +10,19 @@ module.exports = BaseView.extend({
       evt.preventDefault();
       location.href = $(this).attr('href');
     });
+    $('#cli').on('click', function(evt) {
+      evt.preventDefault();
+      $('#cli-usage').show();
+      setInterval(function(){
+        $('#cli-usage a span').toggleClass('last-letter');
+      }, 300);
+    });
+    $('#show-cli-demo').on('click', function(evt) {
+      evt.preventDefault();
+      $('#cli-demo').show().append($('<img>').attr({
+        src: '/images/cli-demo.gif'
+      }));
+    });
   }
 });
 module.exports.id = 'home/index';
