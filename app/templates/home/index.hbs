@@ -1,18 +1,23 @@
 <h1><img src="/images/logo.png" srcset="/images/logo@2x.png 2x" alt="{{appName}} logo"></h1>
-<p>{{{description}}}</p>
+<p id="description"></p>
 <div id="button">
-  <a href="/a" id="start">Start Coding</a>
-  <a href="#" id="cli"><i class="fa fa-keyboard-o fa-lg"></i> Using CLI</a>
+  <div id="casto-button">
+    <a href="/a" id="start">Start Coding</a>
+    <a href="#" id="cli"><i class="fa fa-keyboard-o fa-lg"></i> Using CLI</a>
+  </div>
+  <ul id="social-button">
+    <li><a href="http://twitter.com/__casto__" target="_blank"><i class="fa fa-twitter fa-lg"></i></a></li>
+    <li><a href="https://github.com/hikarock/casto" target="_blank"><i class="fa fa-github fa-lg"></i></a></li>
+  </ul>
 </div>
 <div id="cli-usage">
   <p>$ npm install -g casto<br>
     $ casto -b hello.js<br><br>
-    <a href="#" id="show-cli-demo">&gt; Watch CLI Dem<span class="last-letter">o</span></a></p>
+    <a href="#cli-demo" id="show-cli-demo">&gt; DEM<span class="last-letter">0</span></a></p>
 </div>
-<div id="cli-demo"></div>
-<ul id="social-button">
-  <li><a href="http://twitter.com/__casto__" target="_blank"><i class="fa fa-twitter fa-lg"></i></a></li>
-  <li><a href="https://github.com/hikarock/casto" target="_blank"><i class="fa fa-github fa-lg"></i></a></li>
-</ul>
 <ol id="line-number"></ol>
+<div id="cli-demo">
+  <img src="/images/cli-demo.gif">
+</div>
+<span id="description-text">{{{description}}}</span>
 

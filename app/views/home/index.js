@@ -17,11 +17,11 @@ module.exports = BaseView.extend({
         $('#cli-usage a span').toggleClass('last-letter');
       }, 300);
     });
-    $('#show-cli-demo').on('click', function(evt) {
-      evt.preventDefault();
-      $('#cli-demo').show().append($('<img>').attr({
-        src: '/images/cli-demo.gif'
-      }));
+    $('#show-cli-demo').leanModal();
+    var description = $('#description-text').text();
+    $('#description').typed({
+      strings: [description],
+      typeSpeed: 0
     });
   }
 });
