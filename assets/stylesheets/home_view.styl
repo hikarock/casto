@@ -3,30 +3,30 @@ body
   background-color: #222
   color: $casto-green
   font-family: $casto-font
+  overflow: hidden
 
   .home_index_view
     h1
       text-align: center
       margin-top: 100px
       font-weight: 300
-      font-size: 12px
-    p
+    #description
       text-align: center
-      line-height: 1.8em
+      line-height: 14px
+      height: 14px
       margin-top: 30px
+      margin-bottom: 30px
+    #description-text
+      display: none
     div#cli-demo
       display: none
-      margin-top: 45px
-      width: 100%
       img
         display: block
         width: 960px
-        margin: auto
-        border: 1px solid #333
     div#cli-usage
       display: none
       text-align: center
-      margin-top: 45px
+      margin-top: 36px
       width: 100%
       background-color: #333
       p
@@ -38,6 +38,9 @@ body
         a
           text-decoration: none
           color: $casto-green
+          &:hover
+            background-color: $casto-green
+            color: #222
           span.last-letter
             background-color: $casto-green
             color: #222
@@ -45,39 +48,40 @@ body
         display: none
         width: 960px
         margin: 20px
-    ul#social-button
-      margin: 0
-      padding: 50px 0 0 0
-      list-style-type: none
-      text-align: center
-      li
-        &:first-child
-          margin-right: 15px
-        display: inline-block
-        a
-          color: $casto-green
     div#button
-      text-align: center
-      font-weight: 300
-      margin-top: 50px
-      margin-bottom: 20px
-      a
-        text-decoration: none
-        border: 1px solid $casto-green
-        color: $casto-green
-        padding: 10px 15px 10px 15px
-        border-radius: 7px
-        &:hover
-          background-color: $casto-green
-          color: #222
-        &#start
-          border: 1px solid $casto-green
-          background-color: $casto-green
-          color: #222;
-          margin-right: 15px
-          &:hover
-            background-color: #222
+      ul#social-button
+        margin: 0
+        padding: 50px 0 0 0
+        list-style-type: none
+        text-align: center
+        li
+          &:first-child
+            margin-right: 15px
+          display: inline-block
+          a
             color: $casto-green
+      div#casto-button
+        text-align: center
+        font-weight: 300
+        margin-top: 20px
+        margin-bottom: 20px
+        a
+          text-decoration: none
+          border: 1px solid $casto-green
+          color: $casto-green
+          padding: 10px 15px 10px 15px
+          border-radius: 7px
+          &:hover
+            background-color: $casto-green
+            color: #222
+          &#start
+            border: 1px solid $casto-green
+            background-color: $casto-green
+            color: #222;
+            margin-right: 15px
+            &:hover
+              background-color: #222
+              color: $casto-green
     ol#line-number
       margin: 0
       padding-top: 0
