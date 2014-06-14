@@ -1,5 +1,5 @@
 <h1><img src="/images/logo.png" srcset="/images/logo@2x.png 2x" alt="{{appName}} logo"></h1>
-<p id="description"></p>
+<div id="description-box"><span id="description"></span></div>
 <div id="button">
   <div id="casto-button">
     <a href="/a" id="start">Start Coding</a>
@@ -13,11 +13,12 @@
 <div id="cli-usage">
   <p>$ npm install -g casto<br>
     $ casto -b hello.js<br><br>
-    <a href="#cli-demo" id="show-cli-demo">&gt; DEM<span class="last-letter">0</span></a></p>
+    &gt; <a href="#cli-demo" id="show-cli-demo">DEM<span class="last-letter">0</span></a>
+  </p>
 </div>
 <ol id="line-number"></ol>
 <div id="cli-demo">
   <img src="/images/cli-demo.gif">
 </div>
-<span id="description-text">{{{description}}}</span>
+<span id="description-text">{{description}}</span>
 
