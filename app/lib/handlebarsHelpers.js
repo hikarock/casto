@@ -6,6 +6,10 @@ module.exports = function(Handlebars) {
   return {
     copyright: function(year) {
       return new Handlebars.SafeString("&copy;" + year);
+    },
+    unescape: function(context) {
+      var html = context.replace(/<\\\//g, '</');
+      return html;
     }
   };
 };

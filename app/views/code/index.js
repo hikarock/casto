@@ -308,6 +308,11 @@ module.exports = BaseView.extend({
    */
   preRender: function() {
     console.log("--- preRender");
+    if (this.model.get('body')) {
+      var code = this.model.get('body');
+      code = code.replace(/<\//g, '<\\/');
+      this.model.set('body', code);
+    }
   },
 
   /*
