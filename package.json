@@ -6,7 +6,6 @@
   "scripts": {
     "test": "npm run test-unit",
     "test-unit": "mocha --ui bdd --reporter spec ./test/app --recursive --require ./test/helper.js",
-    "test-karma": "grunt compile && karma start test/karma.config.js --single-run",
     "start": "node index.js",
     "postinstall": "test -f ../../package.json && npm install ../../ || echo",
     "postupdate": "test -f ../../package.json && npm install ../../ || echo"
@@ -30,9 +29,6 @@
     "nodemon": "~0.7.6",
     "mocha": "~1.9.0",
     "chai": "~1.8.1",
-    "karma": "~0.10.4",
-    "karma-chrome-launcher": "~0.1.0",
-    "karma-mocha": "~0.1.0",
     "should": "~3.2.0-beta1"
   },
   "engines": {
