@@ -13,6 +13,8 @@
 
 ## Casto
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hikarock/casto?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Live coding in browse, using text editor.
 
 - URL
