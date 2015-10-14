@@ -1,7 +1,7 @@
 {
   "api":{
     "storyboards":{
-      "host":"local.storyboards.jp",
+      "host":"localhost:8080",
       "protocol":"http"
     }
   }
