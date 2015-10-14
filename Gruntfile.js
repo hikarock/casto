@@ -40,8 +40,8 @@ module.exports = function(grunt) {
             return filename.replace('app/templates/', '').replace('.hbs', '');
           }
         },
-        src: "app/templates/**/*.hbs",
-        dest: "app/templates/compiledTemplates.js",
+        src: 'app/templates/**/*.hbs',
+        dest: 'app/templates/compiledTemplates.js',
         filter: function(filepath) {
           var filename = path.basename(filepath);
           // Exclude files that begin with '__' from being sent to the client,
@@ -79,6 +79,7 @@ module.exports = function(grunt) {
       options: {
         debug: true,
         alias: [
+          'node_modules/handlebars/runtime.js:handlebars',
           'node_modules/rendr-handlebars/index.js:rendr-handlebars'
         ],
         aliasMappings: [
@@ -131,7 +132,7 @@ module.exports = function(grunt) {
         stdio: 'inherit'
       }
     }, function () {
-      grunt.fail.fatal(new Error("nodemon quit"));
+      grunt.fail.fatal(new Error('nodemon quit'));
     });
   });
 
