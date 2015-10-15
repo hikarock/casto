@@ -1,29 +1,34 @@
 var express = require('express')
   , rendr = require('rendr')
+  , compress = require('compression')
+  , bodyParser = require('body-parser')
+  , serveStatic = require('serve-static')
+  , logger = require('morgan')
   , config = require('config')
   , app = express();
 
 /**
  * Initialize Express middleware stack.
  */
-app.use(express.compress());
-app.use(express.static(__dirname + '/public'));
-app.use(express.logger());
-app.use(express.bodyParser());
+app.use(compress());
+app.use(serveStatic(__dirname + '/public'));
+app.use(logger('combined'))
+app.use(bodyParser.json());
 
 /**
  * Initialize our Rendr server.
  */
 var server = rendr.createServer({
   dataAdapterConfig: config.api,
-  errorHandler: function (err, req, res, next){
+  errorHandler: function (err, req, res){
     if (err.status == 404) {
       res.redirect('404');
     } else {
+      console.error(err);
       res.redirect('503');
     }
   },
-  notFoundHandler: function (req, res, next){
+  notFoundHandler: function (req, res){
     res.redirect('404');
   }
 });
@@ -36,7 +41,9 @@ var server = rendr.createServer({
   *
   *     app.use('/my_cool_app', server);
   */
-app.use(server);
+server.configure(function (expressApp) {
+  app.use('/', expressApp);
+});
 
 /**
  * Start the Express server.
@@ -44,7 +51,7 @@ app.use(server);
 function start(){
   var port = process.env.PORT || 3030;
   app.listen(port);
-  console.log("server pid %s listening on port %s in %s mode",
+  console.log('server pid %s listening on port %s in %s mode',
     process.pid,
     port,
     app.get('env')

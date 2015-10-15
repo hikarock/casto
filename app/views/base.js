@@ -7,9 +7,9 @@ module.exports = RendrView.extend({
   getTemplateData: function() {
     var data = RendrView.prototype.getTemplateData.call(this);
     return _.extend({}, data, {
-      version:     0.1,
+      version:     0.2,
       appName:     'Casto',
-      apiName:     'Storyboards',
+      apiName:     'Stobo',
       apiUrl:      'http://www.storyboards.jp',
       description: 'Live coding in browse, using text editor.'
     });
