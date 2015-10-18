@@ -176,7 +176,7 @@ module.exports = BaseView.extend({
   setEditor: function() {
     var that  = this,
         theme = 'ace/theme/tomorrow_night_eighties',
-        mode  = 'ace/mode/javascript',
+        mode  = 'ace/mode/text',
         lineNumber = that.getLineNumber();
 
     if (this.model.get('filename')) {
