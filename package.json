@@ -1,6 +1,6 @@
 {
   "name": "casto",
-  "version": "0.0.2",
+  "version": "0.2.1",
   "description": "Live coding in browse, using text editor.",
   "main": "index.js",
   "scripts": {

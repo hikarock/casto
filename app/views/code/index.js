@@ -32,11 +32,11 @@ module.exports = BaseView.extend({
     return false;
   },
 
-  handleDragleave: function(evt) {
+  handleDragleave: function() {
     $('#editor, .disconnected').removeClass('over');
   },
 
-  handleDragover: function(evt) {
+  handleDragover: function() {
     $('#editor, .disconnected').addClass('over');
   },
 
@@ -176,7 +176,7 @@ module.exports = BaseView.extend({
   setEditor: function() {
     var that  = this,
         theme = 'ace/theme/tomorrow_night_eighties',
-        mode  = 'ace/mode/javascript',
+        mode  = 'ace/mode/text',
         lineNumber = that.getLineNumber();
 
     if (this.model.get('filename')) {
@@ -220,7 +220,7 @@ module.exports = BaseView.extend({
       return;
     }
     pusher = new Pusher(that._PUSHER_API_KEY);
-    channel = pusher.subscribe("casto-" + that.model.get('unique'));
+    channel = pusher.subscribe('casto-' + that.model.get('unique'));
     channel.bind('code-casting', function(code) {
       that.save(code.body);
     });
@@ -300,14 +300,14 @@ module.exports = BaseView.extend({
    * Environment: shared.
    */
   initialize: function() {
-    console.log("--- initialize");
+    console.log('--- initialize');
   },
 
   /*
    * Environment: shared.
    */
   preRender: function() {
-    console.log("--- preRender");
+    console.log('--- preRender');
     if (this.model.get('body')) {
       var code = this.model.get('body');
       code = code.replace(/<\//g, '<\\/');
@@ -319,7 +319,7 @@ module.exports = BaseView.extend({
    * Environment: client.
    */
   postRender: function() {
-    console.log("--- postRender");
+    console.log('--- postRender');
 
     var unique  = this.model.get('unique'),
         token   = localStorage.getItem('token_' + unique),
@@ -367,7 +367,7 @@ module.exports = BaseView.extend({
     });
 
     // drag & drop のイベントを追加
-    $.event.props.push("dataTransfer");
+    $.event.props.push('dataTransfer');
 
     $body.on('drop', function(evt) {
       evt.preventDefault();
