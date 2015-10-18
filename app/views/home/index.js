@@ -3,6 +3,7 @@ var BaseView = require('../base');
 module.exports = BaseView.extend({
   className: 'home_index_view',
   postRender: function() {
+    var intervalId;
     for (var i = 0; i < 100; i++) {
       $('#line-number').append($('<li>'));
     }
@@ -13,11 +14,21 @@ module.exports = BaseView.extend({
     $('#cli').on('click', function(evt) {
       evt.preventDefault();
       $('#cli-usage').show();
-      setInterval(function(){
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      intervalId = setInterval(function(){
         $('#cli-usage a span').toggleClass('last-letter');
       }, 300);
     });
-    $('#show-cli-demo').leanModal();
+    $('#show-cli-demo').on('click', function(evt) {
+      evt.preventDefault();
+      $('#cli-demo').show();
+    });
+    $('#cli-demo').on('click', function(evt) {
+      evt.preventDefault();
+      $('#cli-demo').hide();
+    });
     var description = $('#description-text').text();
     $('#description').typed({
       strings: [description],
