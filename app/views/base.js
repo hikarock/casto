@@ -7,7 +7,7 @@ module.exports = RendrView.extend({
   getTemplateData: function() {
     var data = RendrView.prototype.getTemplateData.call(this);
     return _.extend({}, data, {
-      version:     '0.2.0',
+      version:     '0.2.1',
       appName:     'Casto',
       apiName:     'Stobo',
       apiUrl:      'http://www.storyboards.jp',
