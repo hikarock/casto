@@ -139,7 +139,7 @@ module.exports = function(grunt) {
   grunt.registerTask('compile', ['handlebars', 'browserify', 'stylus']);
 
   // Run the server and watch for file changes
-  grunt.registerTask('startProduction', ['env:production', 'compile']);
+  grunt.registerTask('startProduction', ['compile']);
 
   // Run the server and watch for file changes
   grunt.registerTask('server', ['env:dev', 'compile', 'runNode', 'watch']);
