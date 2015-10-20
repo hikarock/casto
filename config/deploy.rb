@@ -51,18 +51,10 @@ namespace :rendr do
     queue 'echo "-----> Start server."'
     queue! %{
       cd #{deploy_to}/releases/`cat #{deploy_to}/last_version`
-      pwd
-      #./node_modules/forever/bin/forever stop index.js
-      #cd #{deploy_to}/current
-      #grunt startProduction
-    }
-  end
-
-  task :stop do
-    queue 'echo "-----> Stop server."'
-    queue! %{
+      ./node_modules/forever/bin/forever stop index.js
       cd #{deploy_to}/current
-      grunt forever:app:stop
+      grunt compile
+      NODE_ENV=production ./node_modules/forever/bin/forever start index.js
     }
   end
 end

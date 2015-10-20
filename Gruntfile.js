@@ -2,21 +2,9 @@ var path = require('path');
 
 var stylesheetsDir = 'assets/stylesheets';
 
-
 module.exports = function(grunt) {
-  // Project configuration.
-  grunt.loadNpmTasks('grunt-env');
 
   grunt.initConfig({
-    env: {
-      dev: {
-        NODE_ENV : 'development'
-      },
-      production: {
-        NODE_ENV : 'production'
-      }
-    },
-
     pkg: grunt.file.readJSON('package.json'),
 
     stylus: {
@@ -107,14 +95,6 @@ module.exports = function(grunt) {
         ],
         dest: 'public/testBundle.js'
       }
-    },
-    forever: {
-      app: {
-        options: {
-          index: 'index.js',
-          logDir: 'log'
-        }
-      }
     }
   });
 
@@ -122,7 +102,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-forever');
 
   grunt.registerTask('runNode', function () {
     grunt.util.spawn({
@@ -139,10 +118,7 @@ module.exports = function(grunt) {
   grunt.registerTask('compile', ['handlebars', 'browserify', 'stylus']);
 
   // Run the server and watch for file changes
-  grunt.registerTask('startProduction', ['compile']);
-
-  // Run the server and watch for file changes
-  grunt.registerTask('server', ['env:dev', 'compile', 'runNode', 'watch']);
+  grunt.registerTask('server', ['compile', 'runNode', 'watch']);
 
   // Default task(s).
   grunt.registerTask('default', ['compile']);
