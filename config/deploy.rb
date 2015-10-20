@@ -53,7 +53,7 @@ namespace :rendr do
       cd #{deploy_to}/releases/`cat #{deploy_to}/last_version`
       ./node_modules/forever/bin/forever stop index.js
       cd #{deploy_to}/current
-      grunt compile
+      npm run compile
       NODE_ENV=production ./node_modules/forever/bin/forever start index.js
     }
   end

@@ -6,9 +6,10 @@
   "scripts": {
     "test": "npm run test-unit",
     "test-unit": "mocha --ui bdd --reporter spec ./test/app --recursive --require ./test/helper.js",
-    "start": "node index.js",
+    "start": "grunt server",
     "postinstall": "test -f ../../package.json && npm install ../../ || echo",
-    "postupdate": "test -f ../../package.json && npm install ../../ || echo"
+    "postupdate": "test -f ../../package.json && npm install ../../ || echo",
+    "compile": "grunt compile"
   },
   "dependencies": {
     "async": "^0.9.0",
