@@ -50,8 +50,11 @@ namespace :rendr do
   task :start do
     queue 'echo "-----> Start server."'
     queue! %{
-      cd #{deploy_to}/current
-      grunt startProduction
+      cd #{deploy_to}/releases/`cat #{deploy_to}/last_version`
+      pwd
+      #./node_modules/forever/bin/forever stop index.js
+      #cd #{deploy_to}/current
+      #grunt startProduction
     }
   end
 
