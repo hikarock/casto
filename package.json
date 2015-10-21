@@ -24,9 +24,7 @@
     "serve-static": "^1.9.1",
     "underscore": "^1.8.2",
     "forever": "~0.10.11",
-    "config": "~0.4.35",
-    "grunt-env": "~0.4.1",
-    "grunt-forever": "~0.4.4"
+    "config": "~0.4.35"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
