@@ -20,16 +20,16 @@ app.use(bodyParser.json());
  */
 var server = rendr.createServer({
   dataAdapterConfig: config.api,
-  errorHandler: function (err, req, res){
+  errorHandler: function(err, req, res, next) {
     if (err.status == 404) {
-      res.redirect('404');
+      res.redirect('/404');
     } else {
-      console.error(err);
-      res.redirect('503');
+      console.error(err.stack);
+      res.redirect('/503');
     }
   },
-  notFoundHandler: function (req, res){
-    res.redirect('404');
+  notFoundHandler: function(req, res) {
+    res.redirect('/404');
   }
 });
 
@@ -41,14 +41,14 @@ var server = rendr.createServer({
   *
   *     app.use('/my_cool_app', server);
   */
-server.configure(function (expressApp) {
+server.configure(function(expressApp) {
   app.use('/', expressApp);
 });
 
 /**
  * Start the Express server.
  */
-function start(){
+function start() {
   var port = process.env.PORT || 3030;
   app.listen(port);
   console.log('server pid %s listening on port %s in %s mode',
@@ -57,7 +57,6 @@ function start(){
     app.get('env')
   );
 }
-
 
 /**
  * Only start server if this script is executed, not if it's require()'d.
