@@ -4,7 +4,7 @@ module.exports = BaseView.extend({
   className: 'error_503_view',
   setEditor: function() {
     var theme = 'ace/theme/tomorrow_night_eighties',
-        mode  = 'ace/mode/javascript',
+        mode  = 'ace/mode/text',
         editor;
 
     editor = ace.edit('editor');
