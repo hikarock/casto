@@ -1,4 +1,4 @@
-![Casto Logo](https://dl.dropboxusercontent.com/u/459142/img/blog/casto-hexagon.png)
+![casto-logo](https://cloud.githubusercontent.com/assets/236607/24090536/7dc1fafa-0d84-11e7-90cc-e9eb42746517.png)
 
 ## Casto
 
